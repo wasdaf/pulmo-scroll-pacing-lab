@@ -41,7 +41,11 @@ window.studyOptions=(options,active)=>{
 """)
 html = html.replace("  if(recording||window.stillJourney)return;\n   const n=Number(stage.dataset.displayedFrame)", "  if(recording||window.stillJourney)return;\n   window.studyFailed=true;\n   const n=Number(stage.dataset.displayedFrame)")
 html = html.replace("if(Number.isFinite(trailLast))trailClock+=Math.min(.1,(now-trailLast)/1000);","if(studyOn && window.studyClock.options.animate && Number.isFinite(trailLast))trailClock+=Math.min(.1,(now-trailLast)/1000)*window.studyClock.speed(now);")
-html = html.replace("if(!reduced.matches&&(!spec?.worldTracers||spec.legacyFrom!==undefined))trailTick=", "if(studyOn&&window.studyClock.options.animate&&(!spec?.worldTracers||spec.legacyFrom!==undefined))trailTick=")
+html = html.replace("if(!reduced.matches&&(!spec?.worldTracers||spec.legacyFrom!==undefined))trailTick=", "if(studyOn&&window.studyClock.options.animate)trailTick=")
+# Travel along each saved six-point track. Fade only at its two endpoints on recycle.
+html = html.replace("const phase=world?1:(i*.61803399+(reduced.matches?0:trailClock/(3.2+(i%9)*.26)))%1;",
+                    "const cycle=(i*.61803399+trailClock/((world?5.4:3.2)+(i%9)*.26))%1;\n    const phase=world?.22+.78*cycle:cycle;")
+html = html.replace("*(extra?approach:1);","*(extra?approach:1)*(world?ramp(0,.08,cycle)*(1-ramp(.92,1,cycle)):1);")
 html = html.replace("if(n>=441&&n<=446&&direction>=0)warmPictures(446,Math.min(448,frameIds.length-1));","")
 engine = engine.replace("function cue(){return timing.state(fillTime,mode,frame,!completedHold||frame<timing.holdEnd)}", "function cue(){return window.studyClock.cue(timing,frame)}")
 engine = engine.replace("if(resume&&ready&&frame<timing.holdEnd&&!transport)transport={position:frame,end:timing.holdEnd,busy:false};","transport=null; autoplayPending=false;")

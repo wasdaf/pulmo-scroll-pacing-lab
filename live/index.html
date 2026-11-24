@@ -649,7 +649,8 @@ function drawField(ctx,field,n,weight,width=flowSpecs.get(n)?.width||.08){
     const j=i*words,age=coords[j]/4095;
     if(!age)continue;
     const world=spec?.worldTracers&&!(i%22>=spec.legacyFrom);
-    const phase=world?1:(i*.61803399+(reduced.matches?0:trailClock/(3.2+(i%9)*.26)))%1;
+    const cycle=(i*.61803399+trailClock/((world?5.4:3.2)+(i%9)*.26))%1;
+    const phase=world?.22+.78*cycle:cycle;
     const k=Math.min(steps-2,Math.floor(phase*(steps-1))),mix=phase*(steps-1)-k;
     const idx=j+1+2*k;
     let x=((1-mix)*coords[idx]+mix*coords[idx+2])*w/4095;
@@ -661,7 +662,7 @@ function drawField(ctx,field,n,weight,width=flowSpecs.get(n)?.width||.08){
     const sizes=field.radii||flowSpecs.get(n)?.radii;
     const r=sizes?sizes[i]/32:(.87+.64*(i%7)/6)*Math.min(3.4,Math.max(.60,2**(.64*(octaves-rank*6))));
     const exposure=1+2.5*ramp(7,17,octaves)+(recruitment.get(n)||0)*(.6+.8*rank);
-    const visibleAge=(1-Math.pow(1-age,exposure+(world?2.6*approach:0)))*(extra?approach:1);
+    const visibleAge=(1-Math.pow(1-age,exposure+(world?2.6*approach:0)))*(extra?approach:1)*(world?ramp(0,.08,cycle)*(1-ramp(.92,1,cycle)):1);
     if(window.showRibbons&&ribbonCarry>0&&i%6===0){
       const strength=ribbonCarry*visibleAge*population*weight;
       for(let m=0;m<steps-1;m++){
@@ -731,7 +732,7 @@ function paintTrail(now){
   if(bounds){drawBounds(activeField.mask);trailCtx.drawImage(maskCanvas,0,0,trail.width,trail.height);}
   drawField(trailCtx,activeField,trailFrame,trailWeight);
   const spec=flowSpecs.get(trailFrame);
-  if(studyOn&&window.studyClock.options.animate&&(!spec?.worldTracers||spec.legacyFrom!==undefined))trailTick=requestAnimationFrame(nextTrailTick);
+  if(studyOn&&window.studyClock.options.animate)trailTick=requestAnimationFrame(nextTrailTick);
 }
 function nextTrailTick(now){
   if(now-trailLast<32){trailTick=requestAnimationFrame(nextTrailTick);return;}
