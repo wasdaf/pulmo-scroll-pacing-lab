@@ -1,5 +1,6 @@
 export function liveView(frame,settings,report) {
-  let target=0, drawn=-1, busy=false, ready=false, failed=false, errorFrame=-1;
+  let target=0, drawn=-1, busy=false, ready=false, failed=false, errorFrame=-1, mounted=false;
+  const field=settings.field;
   const active=()=>settings.layers==='live'&&!document.hidden;
   const options=()=>({...settings,animate:settings.motion==='on',ribbons:settings.ribbons==='on',foreground:settings.foreground==='on'});
   function show() {frame.classList.toggle('ready',active()&&drawn>=0&&!failed);}
@@ -15,8 +16,14 @@ export function liveView(frame,settings,report) {
       }
     }finally{busy=false;}
   }
+  function mount(){
+    if(mounted||!active())return;
+    mounted=true;report(null,'Loading live anatomy…');
+    frame.src='live/index.html?frame='+Math.min(446,target)+'&until=1084&look=both&field='+field;
+  }
   function sync(){
-    show();if(ready)frame.contentWindow.studyOptions(options(),active());
+    mount();show();
+    if(ready)frame.contentWindow.studyOptions(options(),active());
     if(!active()||failed)report(null,failed?'Live layers unavailable · camera plates':'');
     else if(ready&&drawn===target)report(drawn,'');
     else if(!ready)report(null,'Loading live anatomy…');
@@ -25,15 +32,14 @@ export function liveView(frame,settings,report) {
   }
   frame.addEventListener('load',async()=>{
     const w=frame.contentWindow;
+    if(!mounted||w.location.href==='about:blank')return;
     try{
-      await w.studyIndexReady;
-      await w.studyRendererReady;
-      await w.breathStudy.loaded;
-      if(w.studyFailed||!w.airwayStudy?.inspect().ready||!w.breathStudy.inspect().loaded)throw Error('Motion assets unavailable');
+      await Promise.all([w.studyIndexReady,w.studyRendererReady]);
+      await w.breathStudy?.loaded;
+      if(w.studyFailed||!w.airwayStudy?.inspect().ready||!w.breathStudy?.inspect().loaded)throw Error('Motion assets unavailable');
       ready=true;sync();
     }catch(error){failed=true;show();report(null,'Live layers unavailable · camera plates');console.warn(error);}
   });
-  frame.src='live/index.html?frame=0&until=1084&look=both';
   const reach=document.getElementById('reach');
   setInterval(()=>{
     const v=frame.contentWindow?.studyClock?.reach;
@@ -41,6 +47,15 @@ export function liveView(frame,settings,report) {
     if(reach.textContent!==text)reach.textContent=text;
   },400);
   document.addEventListener('visibilitychange',sync);
-  return {sync,seek(id){if(target!==id)errorFrame=-1;target=id;void run();},reset(){frame.contentWindow?.studyClock?.reset();},
-    get shown(){return active()&&!failed?drawn:-1;},get waiting(){return active()&&ready&&!failed&&errorFrame!==target&&drawn!==target;}};
+  return {sync,field,seek(id){
+    if(target!==id){
+      errorFrame=-1;target=id;
+      if(ready&&active())frame.contentWindow.studyInputTime=frame.contentWindow.performance.now();
+    }
+    mount();void run();
+  },reset(){frame.contentWindow?.studyClock?.reset();},
+    get shown(){return active()&&!failed?drawn:-1;},
+    get needsPlate(){return !active()||failed||errorFrame===target;},
+    get unavailable(){return failed||errorFrame===target;}
+  };
 }

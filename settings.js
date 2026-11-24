@@ -8,6 +8,8 @@ const controls=[
   ['zoomFill','Zoom-driven fill',.8,0,1.3,.05],
   ['drift','Particle speed',.7,.1,2,.1],
   ['boost','Flow boost while zooming',1,0,2,.1],
+  ['field','Airway boundary detail','fast',{fast:'Fast · 320 × 180',fine:'Fine · 640 × 360'}],
+  ['particles','Particle layers','on',{on:'On',off:'Off · breathing only'}],
   ['density','Particle density','light',{light:'Light',full:'Full'}],
   ['palette','Particle palette','accent',{accent:'Gold',original:'Original'}],
   ['ribbons','Airflow ribbons','on',{on:'On',off:'Off'}],
@@ -15,7 +17,7 @@ const controls=[
   ['travel','Scroll distance',1,.4,2,.05],
   ['lungTravel','Lung-detail scroll distance',1,.25,3,.05],
   ['bilayerTravel','Bilayer scroll distance',1,.5,2,.05],
-  ['auto','Autoplay speed',1,.25,3,.05],
+  ['auto','Autoplay speed (screens/s)',1,.25,16,.25],
 ];
 export function setupSettings(url,onChange,getFrame) {
   const values={},inputs=[];

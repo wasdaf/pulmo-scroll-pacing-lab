@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><script src="study-clock.js"></script><script>
+<!doctype html><html lang="en"><head><link rel="preload" as="fetch" crossorigin href="breath-regional-v003.gz"><link rel="preload" as="script" href="engine.js"><script src="study-clock.js"></script><script>
     // A bare share link, including a return from sign-in, opens the full review.
     const reviewURL=new URL(location.href);
     if(!reviewURL.search){
@@ -92,7 +92,7 @@ main.stillMode #laterPlate{visibility:visible!important;display:block}
 <label id="viewerSwitch" title="Show animation controls and scene information"><input id="showViewerUI" type="checkbox" aria-label="Show animation controls and scene information"></label>
 <section id="stage" tabindex="0" aria-label="Lung flow. Scroll or swipe vertically to zoom. Touch a branch to move its particles.">
 <img id="laterPlate" hidden alt=""><img id="plate" fetchpriority="high" alt="" draggable="false"><img id="anatomy" alt="" draggable="false">
-<canvas id="flow" width="1920" height="1080" aria-label="Interactive gas in the airways"></canvas>
+<canvas id="flow" width="960" height="540" aria-label="Interactive gas in the airways"></canvas>
 <video id="movie" hidden muted playsinline loop preload="none" aria-label="Full lung flow recording from frame 0 through frame 1260"></video>
 <canvas id="flowTrail" width="960" height="540" aria-hidden="true" hidden></canvas><canvas id="ecmMarkers" width="1280" height="720" aria-hidden="true" hidden></canvas><canvas id="nearParticles" width="1280" height="720" aria-hidden="true" hidden></canvas><canvas id="blend" hidden aria-hidden="true"></canvas><div id="scale" role="img" aria-label="50 cm at the camera focus plane" style="width:14.316272126%;z-index:1;font-size:clamp(11px,1.25vw,24px)"><span>50 cm</span><i></i></div><span id="status" role="status">Loading lung flow…</span>
 </section><script>window.gasScale=[[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4924865568038985,0.5,"50 cm"],[3.492192183857481,0.5,"50 cm"],[3.4914074718672343,0.5,"50 cm"],[3.489907848203444,0.5,"50 cm"],[3.487482967052429,0.5,"50 cm"],[3.4839369091688486,0.5,"50 cm"],[3.4790884476677952,0.5,"50 cm"],[3.472771353397096,0.5,"50 cm"],[3.464834715449693,0.5,"50 cm"],[3.4551432544010448,0.5,"50 cm"],[3.443577607926869,0.5,"50 cm"],[3.4300345705954514,0.5,"50 cm"],[3.4144272718476154,0.5,"50 cm"],[3.3966852784754713,0.5,"50 cm"],[3.376754610277182,0.5,"50 cm"],[3.3545976599813434,0.5,"50 cm"],[3.3301930109740234,0.5,"50 cm"],[3.303535148794202,0.5,"50 cm"],[3.2746340647543595,0.5,"50 cm"],[3.2435147523559142,0.5,"50 cm"],[3.210216599368401,0.5,"50 cm"],[3.1747926804902136,0.5,"50 cm"],[3.1373089573761885,0.5,"50 cm"],[3.0978433944730304,0.5,"50 cm"],[3.0564850005247512,0.5,"50 cm"],[3.0133328067769427,0.5,"50 cm"],[2.968494793809455,0.2,"20 cm"],[2.9220867795551206,0.2,"20 cm"],[2.8742312814174977,0.2,"20 cm"],[2.825056365489675,0.2,"20 cm"],[2.774694495711824,0.2,"20 cm"],[2.723281395403281,0.2,"20 cm"],[2.6709549329887947,0.2,"20 cm"],[2.61785404293364,0.2,"20 cm"],[2.5641176919359037,0.2,"20 cm"],[2.509883899328763,0.2,"20 cm"],[2.4552888194505638,0.2,"20 cm"],[2.4004658924786133,0.2,"20 cm"],[2.3455450689243342,0.2,"20 cm"],[2.2906521116814718,0.2,"20 cm"],[2.2359079782333233,0.2,"20 cm"],[2.181428284383488,0.2,"20 cm"],[2.12732284969864,0.2,"20 cm"],[2.0736953237595905,0.2,"20 cm"],[2.0206428913227317,0.2,"20 cm"],[1.9682560536090619,0.2,"20 cm"],[1.9166184821692576,0.2,"20 cm"],[1.865806941125486,0.2,"20 cm"],[1.8158912730646737,0.2,"20 cm"],[1.7669344434515457,0.2,"20 cm"],[1.718992638139635,0.2,"20 cm"],[1.6721154083778287,0.2,"20 cm"],[1.6263458576308027,0.2,"20 cm"],[1.581720864545405,0.2,"20 cm"],[1.5382713364906986,0.2,"20 cm"],[1.4960224882668844,0.2,"20 cm"],[1.4549941408065148,0.2,"20 cm"],[1.415201034969327,0.2,"20 cm"],[1.3766531558490978,0.2,"20 cm"],[1.3393560633571526,0.2,"20 cm"],[1.303311225213017,0.2,"20 cm"],[1.268516348849293,0.2,"20 cm"],[1.2349657091178967,0.2,"20 cm"],[1.202650469061094,0.2,"20 cm"],[1.1715589913773072,0.2,"20 cm"],[1.1416771385641304,0.1,"10 cm"],[1.1129885600545637,0.1,"10 cm"],[1.0854749649747033,0.1,"10 cm"],[1.0591163794393355,0.1,"10 cm"],[1.0338913875645406,0.1,"10 cm"],[1.009777355612894,0.1,"10 cm"],[0.9867506388965753,0.1,"10 cm"],[0.9647867712469709,0.1,"10 cm"],[0.9438606370171461,0.1,"10 cm"],[0.9239466257164058,0.1,"10 cm"],[0.9050187694858869,0.1,"10 cm"],[0.8870508637120006,0.1,"10 cm"],[0.8700165711425589,0.1,"10 cm"],[0.8538895099202637,0.1,"10 cm"],[0.8386433259821653,0.1,"10 cm"],[0.8242517502936144,0.1,"10 cm"],[0.8106886413933455,0.1,"10 cm"],[0.7979280137248087,0.1,"10 cm"],[0.7859440522200193,0.1,"10 cm"],[0.7747111135878966,0.1,"10 cm"],[0.7642037147421459,0.1,"10 cm"],[0.7543965087859197,0.1,"10 cm"],[0.7452642489544573,0.1,"10 cm"],[0.7367817409051234,0.1,"10 cm"],[0.7289237837387977,0.1,"10 cm"],[0.7216651001405829,0.1,"10 cm"],[0.7149802560435059,0.1,"10 cm"],[0.7088435702492513,0.1,"10 cm"],[0.7032290144880272,0.1,"10 cm"],[0.6981101044680303,0.1,"10 cm"],[0.6934597825572824,0.1,"10 cm"],[0.6892502928592593,0.1,"10 cm"],[0.6854530495926031,0.1,"10 cm"],[0.682038499866471,0.1,"10 cm"],[0.6789759821601218,0.1,"10 cm"],[0.6762335820702369,0.1,"10 cm"],[0.6737779871840518,0.1,"10 cm"],[0.6715743432718856,0.1,"10 cm"],[0.6695861143688788,0.1,"10 cm"],[0.6677749497315497,0.1,"10 cm"],[0.6661005611069558,0.1,"10 cm"],[0.664520614235514,0.1,"10 cm"],[0.6629906390153459,0.1,"10 cm"],[0.6614716729935165,0.1,"10 cm"],[0.6599541501136972,0.1,"10 cm"],[0.6584361544490511,0.1,"10 cm"],[0.6569159057992627,0.1,"10 cm"],[0.6553917561809763,0.1,"10 cm"],[0.6538621863874151,0.1,"10 cm"],[0.6523258026066516,0.1,"10 cm"],[0.6507813330890734,0.1,"10 cm"],[0.6492276248557648,0.1,"10 cm"],[0.6476636404404622,0.1,"10 cm"],[0.6460884546588038,0.1,"10 cm"],[0.6445012513994228,0.1,"10 cm"],[0.6429013204323306,0.1,"10 cm"],[0.6412880542308019,0.1,"10 cm"],[0.639660944803748,0.1,"10 cm"],[0.6380195805361975,0.1,"10 cm"],[0.6363636430362213,0.1,"10 cm"],[0.6346929039871217,0.1,"10 cm"],[0.6330072220043725,0.05,"5 cm"],[0.631306539497144,0.05,"5 cm"],[0.629590879534855,0.05,"5 cm"],[0.6278603427194465,0.05,"5 cm"],[0.6261151040645679,0.05,"5 cm"],[0.6243554098830694,0.05,"5 cm"],[0.6225815746845851,0.05,"5 cm"],[0.6207939780851456,0.05,"5 cm"],[0.6189930617310365,0.05,"5 cm"],[0.6171793262392266,0.05,"5 cm"],[0.6153533281569056,0.05,"5 cm"],[0.6135156769426886,0.05,"5 cm"],[0.6116670319722064,0.05,"5 cm"],[0.6098080995707762,0.05,"5 cm"],[0.6079396300759116,0.05,"5 cm"],[0.6060624149324213,0.05,"5 cm"],[0.6041772838227851,0.05,"5 cm"],[0.6022851018354664,0.05,"5 cm"],[0.6003867666737395,0.05,"5 cm"],[0.5984832059075508,0.05,"5 cm"],[0.5965753742707148,0.05,"5 cm"],[0.5946642510057794,0.05,"5 cm"],[0.5927508372585937,0.05,"5 cm"],[0.5908361535245701,0.05,"5 cm"],[0.5889212371484115,0.05,"5 cm"],[0.5870071398788973,0.05,"5 cm"],[0.5850949254801697,0.05,"5 cm"],[0.5831856674007243,0.05,"5 cm"],[0.5812804465011654,0.05,"5 cm"],[0.5793803488415131,0.05,"5 cm"],[0.5774864635287184,0.05,"5 cm"],[0.5755998806247777,0.05,"5 cm"],[0.5737216891156621,0.05,"5 cm"],[0.5718529749410357,0.05,"5 cm"],[0.5699948190845724,0.05,"5 cm"],[0.568148295724444,0.05,"5 cm"],[0.5663144704433393,0.05,"5 cm"],[0.5644943984972256,0.05,"5 cm"],[0.5626891231417999,0.05,"5 cm"],[0.5608996740154614,0.05,"5 cm"],[0.5591270655773686,0.05,"5 cm"],[0.5573722955990772,0.05,"5 cm"],[0.5556363437079505,0.05,"5 cm"],[0.5539201699805055,0.05,"5 cm"],[0.552224713583604,0.05,"5 cm"],[0.5505508914612817,0.05,"5 cm"],[0.5488995970649194,0.05,"5 cm"],[0.5472716991242179,0.05,"5 cm"],[0.5456680404564601,0.05,"5 cm"],[0.5440894368112836,0.05,"5 cm"],[0.542536675748222,0.05,"5 cm"],[0.5410105155440798,0.05,"5 cm"],[0.5395116841271668,0.05,"5 cm"],[0.5380408780353378,0.05,"5 cm"],[0.5365987613947425,0.05,"5 cm"],[0.5351859649160543,0.05,"5 cm"],[0.5338030849050508,0.05,"5 cm"],[0.5324506822842,0.05,"5 cm"],[0.5311292816220744,0.05,"5 cm"],[0.5298393701672319,0.05,"5 cm"],[0.5285813968833342,0.05,"5 cm"],[0.5273557714821938,0.05,"5 cm"],[0.5261628634515154,0.05,"5 cm"],[0.5250030010740966,0.05,"5 cm"],[0.5238764704352986,0.05,"5 cm"],[0.5227835144157011,0.05,"5 cm"],[0.5217243316658168,0.05,"5 cm"],[0.5206990755599697,0.05,"5 cm"],[0.5197078531263762,0.05,"5 cm"],[0.5187507239507068,0.05,"5 cm"],[0.5178276990504421,0.05,"5 cm"],[0.5169387397175231,0.05,"5 cm"],[0.5160837563269102,0.05,"5 cm"],[0.5152626071088747,0.05,"5 cm"],[0.5144750968829805,0.05,"5 cm"],[0.5137209757519855,0.05,"5 cm"],[0.5129999377540353,0.05,"5 cm"],[0.5123116194718426,0.05,"5 cm"],[0.511655598597749,0.05,"5 cm"],[0.511031392453893,0.05,"5 cm"],[0.5104384564669978,0.05,"5 cm"],[0.5098761825976346,0.05,"5 cm"],[0.5093438977241741,0.05,"5 cm"],[0.5088408619820425,0.05,"5 cm"],[0.5083662670592889,0.05,"5 cm"],[0.5079192344499484,0.05,"5 cm"],[0.5074988136671451,0.05,"5 cm"],[0.5071039804184041,0.05,"5 cm"],[0.5067336347461673,0.05,"5 cm"],[0.506386599137125,0.05,"5 cm"],[0.5060616166045705,0.05,"5 cm"],[0.505757348748628,0.05,"5 cm"],[0.5054723737999541,0.05,"5 cm"],[0.5052051846531755,0.05,"5 cm"],[0.5049541868971905,0.05,"5 cm"],[0.5047176968501826,0.05,"5 cm"],[0.5044939396081496,0.05,"5 cm"],[0.5042810471165885,0.05,"5 cm"],[0.5040770562759472,0.05,"5 cm"],[0.5038799070924469,0.05,"5 cm"],[0.5036874408868744,0.05,"5 cm"],[0.5034973985750432,0.05,"5 cm"],[0.5033078254482076,0.05,"5 cm"],[0.5031183236980478,0.05,"5 cm"],[0.5029288932976892,0.05,"5 cm"],[0.5027395342202676,0.05,"5 cm"],[0.5025502464389293,0.05,"5 cm"],[0.5023610299268302,0.05,"5 cm"],[0.5021718846571366,0.05,"5 cm"],[0.5019828106030233,0.05,"5 cm"],[0.5017938077376799,0.05,"5 cm"],[0.5016048760343013,0.05,"5 cm"],[0.5014160154660942,0.05,"5 cm"],[0.5012272260062752,0.05,"5 cm"],[0.5010385076280711,0.05,"5 cm"],[0.5008498603047188,0.05,"5 cm"],[0.5006612840094654,0.05,"5 cm"],[0.5004727787155678,0.05,"5 cm"],[0.5002843443962931,0.05,"5 cm"],[0.5000959810249184,0.05,"5 cm"],[0.49990768857473095,0.05,"5 cm"],[0.49971946701902803,0.05,"5 cm"],[0.499531316331117,0.05,"5 cm"],[0.4993432364843152,0.05,"5 cm"],[0.49915522745195007,0.05,"5 cm"],[0.4989672892073592,0.05,"5 cm"],[0.4987794217238882,0.05,"5 cm"],[0.4985916249748982,0.05,"5 cm"],[0.4984038989337548,0.05,"5 cm"],[0.498216243573836,0.05,"5 cm"],[0.4980286588685291,0.05,"5 cm"],[0.4978411447912319,0.05,"5 cm"],[0.4976537013153521,0.05,"5 cm"],[0.49746632841430716,0.05,"5 cm"],[0.497279026061525,0.05,"5 cm"],[0.49709179423044314,0.05,"5 cm"],[0.4969046328945093,0.05,"5 cm"],[0.4967175420271815,0.05,"5 cm"],[0.4965305216019268,0.05,"5 cm"],[0.49634357159222336,0.05,"5 cm"],[0.4961566919715586,0.05,"5 cm"],[0.4959698827134285,0.05,"5 cm"],[0.49578314379134436,0.05,"5 cm"],[0.49559647517882155,0.05,"5 cm"],[0.495409876849388,0.05,"5 cm"],[0.49522334877658114,0.05,"5 cm"],[0.4950368909339485,0.05,"5 cm"],[0.4948505032950474,0.05,"5 cm"],[0.4946641858334454,0.05,"5 cm"],[0.4944779385227198,0.05,"5 cm"],[0.494291761336458,0.05,"5 cm"],[0.4941056542482571,0.05,"5 cm"],[0.49391961723172445,0.05,"5 cm"],[0.49373365026047705,0.05,"5 cm"],[0.493547753308142,0.05,"5 cm"],[0.4933619263483563,0.05,"5 cm"],[0.49317616935476677,0.05,"5 cm"],[0.4929904823010306,0.05,"5 cm"],[0.49280486516081246,0.05,"5 cm"],[0.4926193179077926,0.05,"5 cm"],[0.4924338405156559,0.05,"5 cm"],[0.49224843295809895,0.05,"5 cm"],[0.492063095208828,0.05,"5 cm"],[0.4918778272415593,0.05,"5 cm"],[0.49169262903001926,0.05,"5 cm"],[0.4915075005479439,0.05,"5 cm"],[0.49187934437373426,0.05,"5 cm"],[0.49369058639094415,0.05,"5 cm"],[0.4945103552574942,0.05,"5 cm"],[0.4904777722130884,0.05,"5 cm"],[0.47955611803264053,0.05,"5 cm"],[0.46467174698487534,0.05,"5 cm"],[0.4517241453302314,0.05,"5 cm"],[0.44330136569493456,0.05,"5 cm"],[0.4392447071435591,0.05,"5 cm"],[0.43803960141946785,0.05,"5 cm"],[0.43792759237634693,0.05,"5 cm"],[0.43790849504907153,0.05,"5 cm"],[0.4377784186468878,0.05,"5 cm"],[0.4374366408616714,0.05,"5 cm"],[0.4367935115435833,0.05,"5 cm"],[0.43577066727778113,0.05,"5 cm"],[0.4343011172151033,0.05,"5 cm"],[0.4323293289027534,0.05,"5 cm"],[0.42981152869169575,0.05,"5 cm"],[0.42671540132925984,0.05,"5 cm"],[0.4230201757898247,0.05,"5 cm"],[0.4187161961213972,0.05,"5 cm"],[0.41380457812287436,0.05,"5 cm"],[0.4082964368678838,0.05,"5 cm"],[0.40221228588999336,0.05,"5 cm"],[0.39558096429915596,0.05,"5 cm"],[0.38843886430555036,0.05,"5 cm"],[0.38082847209794657,0.05,"5 cm"],[0.3727975953675463,0.05,"5 cm"],[0.36439794710169093,0.05,"5 cm"],[0.3556840512426352,0.05,"5 cm"],[0.3467120625156373,0.05,"5 cm"],[0.33753877937608817,0.05,"5 cm"],[0.32822059258362807,0.05,"5 cm"],[0.3188125625222892,0.05,"5 cm"],[0.3093676896396785,0.05,"5 cm"],[0.2999362492591739,0.05,"5 cm"],[0.29056521222280446,0.05,"5 cm"],[0.2812978801108417,0.05,"5 cm"],[0.27217349900372034,0.02,"2 cm"],[0.263227130736011,0.02,"2 cm"],[0.25448958852340753,0.02,"2 cm"],[0.24598735113204234,0.02,"2 cm"],[0.23774269162451306,0.02,"2 cm"],[0.22977378464823797,0.02,"2 cm"],[0.22209489955449582,0.02,"2 cm"],[0.2147165720597948,0.02,"2 cm"],[0.20764592611093874,0.02,"2 cm"],[0.20088690991940927,0.02,"2 cm"],[0.19444053199574796,0.02,"2 cm"],[0.18830507572626706,0.02,"2 cm"],[0.18247654998414278,0.02,"2 cm"],[0.17694861402756623,0.02,"2 cm"],[0.17171312467035652,0.02,"2 cm"],[0.16676011482428957,0.02,"2 cm"],[0.16207799734697353,0.02,"2 cm"],[0.1576533611939735,0.02,"2 cm"],[0.15347145421641092,0.02,"2 cm"],[0.14951664450089241,0.02,"2 cm"],[0.14577216287745653,0.02,"2 cm"],[0.1422201565637514,0.02,"2 cm"],[0.13884174280921255,0.02,"2 cm"],[0.13561700889506298,0.02,"2 cm"],[0.13252502286314854,0.02,"2 cm"],[0.1295439193466225,0.02,"2 cm"],[0.1266508888411098,0.02,"2 cm"],[0.12382306819805773,0.02,"2 cm"],[0.12104148883621746,0.02,"2 cm"],[0.11829078706308427,0.02,"2 cm"],[0.11555841014106702,0.01,"1 cm"],[0.1128343802531061,0.01,"1 cm"],[0.11011110138363354,0.01,"1 cm"],[0.10738310182651988,0.01,"1 cm"],[0.10464685179486981,0.01,"1 cm"],[0.10190058103081794,0.01,"1 cm"],[0.09914404277114665,0.01,"1 cm"],[0.09637838500125956,0.01,"1 cm"],[0.09360594660730616,0.01,"1 cm"],[0.09083005352830631,0.01,"1 cm"],[0.08805487928128818,0.01,"1 cm"],[0.08528525720666613,0.01,"1 cm"],[0.08252652490012527,0.01,"1 cm"]];
@@ -117,18 +117,18 @@ main.stillMode #laterPlate{visibility:visible!important;display:block}
   n=normalize(n);if(window.gasStartFrame===n)return;
   window.gasStartFrame=n;const im=new Image();im.src=source(n);
   try{await im.decode()}catch{return}
-  if(window.gasStartFrame!==n||window.airwayStudy?.inspect().ready||window.gasRecording)return;
+  if(window.gasStartFrame!==n||window.airwayStudy?.ready||window.gasRecording)return;
   im.id='plate';im.alt='';im.draggable=false;
   stage.querySelector('#plate').replaceWith(im);label(n);
   window.showGasScale?.(n);
  };
  document.addEventListener('DOMContentLoaded',()=>{
-  if(!window.airwayStudy?.inspect().ready){
+  if(!window.airwayStudy?.ready){
    document.getElementById('timeline').value=window.gasStartFrame;
    document.getElementById('frameLabel').textContent='F'+key(window.gasStartFrame);
   }
   document.getElementById('timeline').addEventListener('input',e=>{
-   if(!window.airwayStudy?.inspect().ready)window.gasEarlySeek(e.target.value);
+   if(!window.airwayStudy?.ready)window.gasEarlySeek(e.target.value);
   });
  });
 })();
@@ -721,9 +721,10 @@ function paintTrail(now){
   if(shot&&trailWeight&&!recording&&!document.hidden){
     trailCtx.clearRect(0,0,trail.width,trail.height);trail.hidden=false;
     const moving=drawSites(trailCtx,shot,now-arrivalStart,trailFrame);
-    if(moving&&!reduced.matches)trailTick=requestAnimationFrame(paintTrail);
+    if(studyOn&&window.studyClock.options.animate&&moving&&!reduced.matches)trailTick=requestAnimationFrame(paintTrail);
     return;
   }
+  if(!window.showPeptides&&!window.showRibbons){trail.hidden=true;return;}
   const bounds=el('flowBounds').checked&&activeField;
   if((!trailWeight&&!bounds)||!activeField||document.hidden||recording){trail.hidden=true;return;}
   if(studyOn && window.studyClock.options.animate && Number.isFinite(trailLast))trailClock+=Math.min(.1,(now-trailLast)/1000)*window.studyClock.speed(now);
@@ -756,7 +757,7 @@ function updateParticles(){
   const spec=flowSpecs.get(n);
   const gasBand=Boolean(enabled&&spec?.travel);
   const study=window.airwayStudy;
-  const gasReady=gasBand&&study?.inspect().frame===446&&study.inspect().ready;
+  const gasReady=gasBand&&study?.frame===446&&study.ready;
   const wasBridge=window.journeyGasBridge;
   window.journeyGasBridge=Boolean(gasReady);
   main.classList.toggle('gasBridge',Boolean(gasReady));
@@ -769,7 +770,7 @@ function updateParticles(){
   setTrail(n,enabled);
   if(gasReady){
     study.redraw();
-  }else if(gasBand&&study?.inspect().ready&&!gasLoad){
+  }else if(gasBand&&study?.ready&&!gasLoad){
     gasLoad=study.select(446).then(()=>{if(window.journeyOutside)updateParticles();}).catch(()=>{}).finally(()=>{gasLoad=null;});
   }
   paintMarkers(n);
@@ -882,12 +883,12 @@ async function selectIndex(i) {
   if(n>446){
     const spec=flowSpecs.get(n),guided=transition.value!=='off';
     const study=window.airwayStudy;
-    const anchor=guided&&spec?.travel&&study?.inspect().ready&&study.inspect().frame!==446
+    const anchor=guided&&spec?.travel&&study?.ready&&study.frame!==446
       ? study.select(446) : null;
     // Keep the last complete image visible until the incoming anatomy and path packet can paint together.
     const [img,field]=await Promise.all([fetchImage(n),guided&&spec?readField(n):null,anchor]);
     if(ticket!==request||recording)return;
-    const old=outside||window.airwayStudy?.inspect().frame||0;
+    const old=outside||window.airwayStudy?.frame||0;
     capture(old,n);
     activeField=field;
     img.id='laterPlate';img.alt='';img.draggable=false;
@@ -908,9 +909,9 @@ async function selectIndex(i) {
       if(transition.value!=='off')void readField(next).catch(()=>{});
     }
   }else{
-    if(window.airwayStudy?.inspect().ready){
+    if(window.airwayStudy?.ready){
       const drawn=await window.airwayStudy.select(n);
-      if(!drawn||window.airwayStudy.inspect().frame!==n)return;
+      if(!drawn||window.airwayStudy.frame!==n)return;
     }
     else await window.gasEarlySeek(n);
     if(ticket!==request||recording)return;
@@ -997,12 +998,24 @@ async function readIndex(file,first=false){
     else {slider.value=i;updateParticles();}
   }
   if(first&&new URLSearchParams(location.search).has('tour')&&!reduced.matches&&!recording){
-    if(window.airwayStudy?.inspect().ready)el('sequencePlay').click();
+    if(window.airwayStudy?.ready)el('sequencePlay').click();
     else {const initial=Number(slider.value),ready=window.gasReady;window.gasReady=()=>{ready();if(!recording&&!document.hidden&&!sequencePlaying&&Number(slider.value)===initial)el('sequencePlay').click();};}
   }
 }
 
 window.studyIndexReady=readIndex('journey-native-20261121-v003.json',true);
+
+window.studyTestFiles=(ids,detail)=>{
+  const files=new Set(),packet=n=>(detail==='fine'?'camera/':'camera-fast/')+String(n).padStart(4,'0')+'.bin';
+  for(const n of ids){
+    if(n<=446){files.add(packet(n));continue;}
+    files.add(pictureFile(n));
+    const spec=flowSpecs.get(n);
+    if(spec?.paths)files.add(spec.paths);
+    if(spec?.travel)files.add(packet(446));
+  }
+  return [...files];
+};
 window.studySelect=async n=>{
   const index=frameIds.indexOf(n);
   if(index<0)throw Error('Missing selected frame '+n);
@@ -1012,13 +1025,14 @@ window.studySelect=async n=>{
 };
 let studyOn=true;
 window.studyOptions=(options,active)=>{
-  studyOn=active;
+  window.studyLayersActive=studyOn=active;
   Object.assign(window.studyClock.options,options);
   window.airwayStudy?.play(active && options.animate);
   window.breathStudy?.choose(options.look);
   palette.value=options.palette;applyPalette();
   densityMenu.value=options.density;
-  window.showRibbons=options.ribbons;
+  window.showPeptides=options.particles!=='off';
+  window.showRibbons=window.showPeptides&&options.ribbons;
   window.showForeground=options.foreground;
   window.airwayStudy?.redraw();updateParticles();window.redrawGoldNear?.();
 };
@@ -1502,7 +1516,7 @@ document.addEventListener('visibilitychange',()=>{if(document.hidden)stopMotion(
    const width=nearTweenWidth||opticalWidth(n)/zoom;
    const pose=!outside&&n>=385&&n<446&&scrolling?Math.max(n,Math.min(n+3,position)):n;
    const aim=nearTweenAim||interpolateAim(Math.floor(pose),Math.ceil(pose),pose%1);
-   return {frame:n,width,aim,enabled:!window.stillJourney&&window.showPeptides&&window.showForeground&&window.goldDownloadReady&&!recording&&transition.value!=='off',
+   return {frame:n,width,aim,enabled:studyOn&&!window.stillJourney&&window.showPeptides&&window.showForeground&&window.goldDownloadReady&&!recording&&transition.value!=='off',
      animate:!reduced.matches&&(el('play').getAttribute('aria-pressed')==='true'||sequencePlaying),
      travel:Math.log2((window.gasScale[0]?.[0]||3.49)/width),
      strength:ramp(12,88,n)*.92,full:densityMenu.value==='full',accent:window.flowAccent,

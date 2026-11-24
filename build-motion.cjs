@@ -45,6 +45,7 @@ async function main() {
   }
   for(const file of copy) await write(file,await read(file));
   await write('assets.json',JSON.stringify([...files].sort()));
-  console.log(files.size+' motion assets');
+  await require('./pack-camera.cjs')(sharp);
+  console.log('Packed motion assets and manifest ready');
 }
 main().catch(e=>{console.error(e);process.exitCode=1;});

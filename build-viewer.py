@@ -58,5 +58,61 @@ engine = engine.replace('if(!breath.enabled)time+=dt;', 'if(!breath.enabled)time
 engine = engine.replace('time+=dt*breath.speed;', 'time+=dt*breath.speed*window.studyClock.speed(now);')
 engine = span(engine,' const autoStart=playing&&','playing=false;autoplayPending=false;setPlaying(false);',' const autoStart=false;')
 engine = engine.replace('if(advancing)seconds+=elapsed;', 'if(advancing)seconds+=elapsed*window.studyClock.options.breathRate;')
+# Browser review plates are 960x540. Keep source-space displacement and optics calibrated
+# in authored units while sampling framebuffer UVs in the actual review raster.
+html = html.replace('id="flow" width="1920" height="1080"', 'id="flow" width="960" height="540"')
+engine = (engine.replace('gl_FragCoord.x/1920.', 'gl_FragCoord.x/960.')
+                .replace('gl_FragCoord.y/1080.', 'gl_FragCoord.y/540.')
+                .replace('gl_FragCoord.xy/vec2(1920.,1080.)','gl_FragCoord.xy/vec2(960.,540.)')
+                .replace('gl_PointSize=mix(', 'gl_PointSize=.5*mix('))
+engine = span(engine, ' const size=n=>', ' const cameraIds=', ' const size=()=>(960*540+2*640*360)*4;\n')
+engine = span(engine, "  const plateUrl=n>396?", "   signal.throwIfAborted", """
+  item={controller,size:size(n),ready:false,speculative};
+  const directory=new URLSearchParams(location.search).get('field')==='fine'?'camera/':'camera-fast/';
+  item.promise=get(directory+k+'.bin',signal,priority).then(async blob=>{
+   const header=async at=>new DataView(await blob.slice(at,at+4).arrayBuffer()).getUint32(0,true);
+   const plateEnd=4+await header(0),wallEnd=plateEnd+4+await header(plateEnd);
+   if(plateEnd<=4||wallEnd<=plateEnd+4||wallEnd>=blob.size)throw Error('Incomplete camera '+k);
+   return Promise.all([blob.slice(4,plateEnd),blob.slice(plateEnd+4,wallEnd),blob.slice(wallEnd)]
+     .map(layer=>decode(layer,k)));
+  }).then(([p,wall,field])=>{
+""")
+# Defer speculative downloads and GPU buffer updates while requested views are in flight.
+engine = engine.replace("if(document.hidden){await new Promise(resolve=>document.addEventListener",
+                        """if(window.studyLayersActive===false || window.showPeptides===false&&!window.showRibbons || performance.now()-(window.studyInputTime||0)<500){
+     await new Promise(resolve=>setTimeout(resolve,160));continue;
+    }
+    if(document.hidden){await new Promise(resolve=>document.addEventListener""")
+engine = engine.replace('if(ready&&inView&&!document.hidden', 'if(ready&&window.studyLayersActive!==false&&inView&&!document.hidden')
+engine = engine.replace('if(breath.enabled||playing||pointer.inside', 'if(playing||pointer.inside')
+engine = engine.replace("    gasPass(0);", "    if(state.gas>.001 && (window.showRibbons!==false||window.showPeptides!==false))gasPass(0);")
+engine = engine.replace('if(focus[3]>.002){','if(state.gas>.001 && focus[3]>.002){')
+engine = engine.replace('timer=setTimeout(run,transporting||moved?0:40);','timer=setTimeout(run,transporting?0:moved?55:120);')
+html = html.replace('studyOn=active;', 'window.studyLayersActive=studyOn=active;')
+html = html.replace('window.showRibbons=options.ribbons;', "window.showPeptides=options.particles!=='off';\n  window.showRibbons=window.showPeptides&&options.ribbons;")
+html = html.replace("const bounds=el('flowBounds').checked&&activeField;", "if(!window.showPeptides&&!window.showRibbons){trail.hidden=true;return;}\n  const bounds=el('flowBounds').checked&&activeField;")
+html = html.replace('enabled:!window.stillJourney&&window.showPeptides', 'enabled:studyOn&&!window.stillJourney&&window.showPeptides')
+html = html.replace('if(moving&&!reduced.matches)trailTick=', 'if(studyOn&&window.studyClock.options.animate&&moving&&!reduced.matches)trailTick=')
+
+# Give the breathing field a network head start. The renderer also fetches it using CORS.
+html = html.replace('<head>', '<head><link rel="preload" as="fetch" crossorigin href="breath-regional-v003.gz"><link rel="preload" as="script" href="engine.js">',1)
+engine = engine.replace("performance.mark('lung-interactive');", "window.studyInputTime=performance.now();performance.mark('lung-interactive');")
+# Hot-path reads avoid inspect(), which also checks the GPU error state.
+engine = engine.replace('window.airwayStudy={redraw:draw,', 'window.airwayStudy={get ready(){return ready},get frame(){return frame},redraw:draw,')
+html = html.replace('inspect().ready','ready').replace('inspect().frame','frame')
+html = html.replace('window.studySelect=async n=>{', """
+window.studyTestFiles=(ids,detail)=>{
+  const files=new Set(),packet=n=>(detail==='fine'?'camera/':'camera-fast/')+String(n).padStart(4,'0')+'.bin';
+  for(const n of ids){
+    if(n<=446){files.add(packet(n));continue;}
+    files.add(pictureFile(n));
+    const spec=flowSpecs.get(n);
+    if(spec?.paths)files.add(spec.paths);
+    if(spec?.travel)files.add(packet(446));
+  }
+  return [...files];
+};
+window.studySelect=async n=>{""")
+
 (out/'index.html').write_text(html,encoding='utf-8')
 (out/'engine.js').write_text(engine,encoding='utf-8')

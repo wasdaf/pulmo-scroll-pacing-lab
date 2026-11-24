@@ -27,3 +27,5 @@ canvas{width:100%;height:100%;object-fit:contain;min-height:0}
 .fields{display:grid;gap:12px;margin:16px 0 20px}.fields label{display:grid;grid-template-columns:minmax(8rem,1fr) minmax(6rem,1fr) 3.4rem;align-items:center;gap:8px;font-size:.92rem}
 .fields select{grid-column:2/4}.fields input[type=range]{min-width:0;width:100%;accent-color:var(--lime)}.fields output{font-variant-numeric:tabular-nums;text-align:right}
 #tuning{width:min(470px,94vw)}#copyResult{display:block;margin:6px 0;color:var(--lime)}
+.testbar{display:flex;align-items:center;gap:.75rem;margin-top:6px}.testbar button{white-space:nowrap;padding:.35rem .65rem}.testbar output{font-size:.86rem;color:var(--lime)}
+@media(max-width:600px){.testbar{flex-wrap:wrap;gap:.3rem .5rem}.testbar output:not(:empty){flex-basis:100%}}

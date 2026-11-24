@@ -235,7 +235,7 @@ const lungParticles = (() => {
     wallRadius=p.w/.50;
     float fade=mobile?smoothstep(0.,.8,min(along,24.-along)):smoothstep(0.,.39,progress);
     energy=opacity*arrived*retained*fade*mix(.32,1.,variety)*mix(.72,1.,detail)*(.93+.07*sin(clock*.7+6.28*phase))*(1.+.21*push);
-    gl_PointSize=mix(1.,3.6,bloomPass)*mix(1.,clamp(sqrt(measuredFlight?max(0.,clip.w*(clip.w-flightRadius.x))*pow(flightRadius.y/max(.0001,(flightCamera*vec4(clip.xy,clip.w,1.)).w),2.):clip.w/max(.001,clip.w-flight.z)),.55,measuredFlight?6.:2.2),float(flight.z>0.))*clamp((2.65+1.45*variety+.54*sqrt(max(0.,radiusPX)))*(mobile?1.10:1.)*mix(1.,clamp(sqrt(max(.05,radiusPX)*.5),.68,2.4),detail),1.8,13.);
+    gl_PointSize=.5*mix(1.,3.6,bloomPass)*mix(1.,clamp(sqrt(measuredFlight?max(0.,clip.w*(clip.w-flightRadius.x))*pow(flightRadius.y/max(.0001,(flightCamera*vec4(clip.xy,clip.w,1.)).w),2.):clip.w/max(.001,clip.w-flight.z)),.55,measuredFlight?6.:2.2),float(flight.z>0.))*clamp((2.65+1.45*variety+.54*sqrt(max(0.,radiusPX)))*(mobile?1.10:1.)*mix(1.,clamp(sqrt(max(.05,radiusPX)*.5),.68,2.4),detail),1.8,13.);
     originalOffset=breathOffset(clip.xy/clip.w*vec2(.5,-.5)+.5);
     clip.xy+=originalOffset*vec2(2.,-2.)*clip.w;
     referenceUV=clip.xy/clip.w*vec2(.5,-.5)+.5-originalOffset;
@@ -250,11 +250,11 @@ const lungParticles = (() => {
   in vec2 originalOffset; in vec2 referenceUV; uniform float bloomPass; uniform vec4 glowFocus;
 uniform sampler2D goldLuminance;
 float goldGrade(){
-  vec2 uv=vec2(gl_FragCoord.x/1920.,1.-gl_FragCoord.y/1080.);
+  vec2 uv=vec2(gl_FragCoord.x/960.,1.-gl_FragCoord.y/540.);
   return smoothstep(.34,.72,texture(goldLuminance,uv).r);
 }
     float pointerLight(){
-      vec2 uv=gl_FragCoord.xy/vec2(1920.,1080.);
+      vec2 uv=gl_FragCoord.xy/vec2(960.,540.);
       vec2 delta=(vec2(uv.x,1.-uv.y)-glowFocus.xy)*vec2(16./9.,1.);
       return glowFocus.w*(1.-smoothstep(0.,max(.0001,glowFocus.z),length(delta)));
     } uniform vec4 flight;
@@ -264,7 +264,7 @@ uniform sampler2D bounds;
   void main(){
     vec2 pt=gl_PointCoord*2.-1.; float rr=dot(pt,pt);
     if(rr>1.||energy<.002)discard;
-    vec3 field=texture(bounds,(flight.z>0.?referenceUV:vec2(gl_FragCoord.x/1920.,1.-gl_FragCoord.y/1080.)-originalOffset)).rgb;
+    vec3 field=texture(bounds,(flight.z>0.?referenceUV:vec2(gl_FragCoord.x/960.,1.-gl_FragCoord.y/540.)-originalOffset)).rgb;
     if(field.b<.035)discard;
     float behind=max(0.,depth-field.r/max(field.b,.01)-1.30*wallRadius-.003);
     float transmission=(.085+.915*exp(-43.*behind))*(.44+.56*clamp(field.g/max(field.b,.1),0.,1.));
@@ -433,18 +433,18 @@ precision highp float;
 in vec2 originalOffset; in vec2 referenceUV; uniform float bloomPass; uniform vec4 glowFocus;
 uniform sampler2D goldLuminance;
 float goldGrade(){
-  vec2 uv=vec2(gl_FragCoord.x/1920.,1.-gl_FragCoord.y/1080.);
+  vec2 uv=vec2(gl_FragCoord.x/960.,1.-gl_FragCoord.y/540.);
   return smoothstep(.34,.72,texture(goldLuminance,uv).r);
 }
     float pointerLight(){
-      vec2 uv=gl_FragCoord.xy/vec2(1920.,1080.);
+      vec2 uv=gl_FragCoord.xy/vec2(960.,540.);
       vec2 delta=(vec2(uv.x,1.-uv.y)-glowFocus.xy)*vec2(16./9.,1.);
       return glowFocus.w*(1.-smoothstep(0.,max(.0001,glowFocus.z),length(delta)));
     } uniform vec4 flight;
 uniform sampler2D bounds;uniform float pointPass,opacity,front,clearFront,study,useAccent;
 in vec2 uv;in float energy,thin,coverDepth,radius,arrival,veil,fray;out vec4 color;
 void main(){
- vec3 f=texture(bounds,(flight.z>0.?referenceUV:vec2(gl_FragCoord.x/1920.,1.-gl_FragCoord.y/1080.)-originalOffset)).rgb;
+ vec3 f=texture(bounds,(flight.z>0.?referenceUV:vec2(gl_FragCoord.x/960.,1.-gl_FragCoord.y/540.)-originalOffset)).rgb;
  if(f.b<.08||energy<.002)discard;
  float depth=f.r/max(f.b,.004);
  float behind=max(0.,coverDepth-depth-1.33*radius-.004);
@@ -492,7 +492,7 @@ const frameBuffer=(()=>{
  let target=window.gasStartFrame,direction=1,timer,epoch=0,moved=false;
  const stats={hits:0,misses:0,prefetchedHits:0,canceled:0};
  const key=n=>String(n).padStart(4,'0');
- const size=n=>((n>396?1920*1080:1280*720)*2+960*540)*4;
+ const size=()=>(960*540+2*640*360)*4;
  const cameraIds=[0, 73, 75, 77, 79, 81, 83, 85, 87, 89, 91, 93, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 177, 180, 183, 186, 189, 192, 195, 198, 201, 204, 207, 210, 213, 216, 219, 222, 225, 228, 231, 234, 237, 240, 243, 246, 249, 250, 255, 260, 265, 270, 275, 280, 285, 290, 295, 300, 305, 310, 315, 320, 325, 330, 335, 340, 345, 350, 352, 354, 356, 358, 360, 362, 364, 366, 368, 370, 372, 374, 376, 378, 380, 382, 384, 386, 388, 390, 392, 394, 396, 397, 398, 399, 400, 401, 402, 403, 404, 405, 406, 407, 408, 409, 410, 411, 412, 413, 414, 415, 416, 417, 418, 419, 420, 421, 422, 423, 424, 425, 426, 427, 428, 429, 430, 431, 432, 433, 434, 435, 436, 437, 438, 439, 440, 441, 442, 443, 444, 445, 446];
  const neighbors=()=>{
   const limited=Number(navigator.connection?.downlink)>0&&navigator.connection.downlink<2;
@@ -534,19 +534,16 @@ const frameBuffer=(()=>{
   }
   stats.misses++;
   const controller=new AbortController(),signal=controller.signal,k=key(n),priority=speculative?'low':'high';
-  const plateUrl=n>396?'volume/'+k+'-ct.webp':'plates/'+k+'.jpg';
+
   item={controller,size:size(n),ready:false,speculative};
-  const poster=document.getElementById('plate');
-  const plate=(poster?.dataset.plateSource || poster?.getAttribute('src'))===plateUrl ?
-    poster.decode().then(()=>poster).catch(()=>get(plateUrl,signal,priority).then(b=>decode(b,k))) :
-    get(plateUrl,signal,priority).then(b=>decode(b,k));
-  const layers=get('stream-v017/frames/'+k+'.bin',signal,priority).then(async blob=>{
-   const length=new DataView(await blob.slice(0,4).arrayBuffer()).getUint32(0,true);
-   if(!length||4+length>=blob.size)throw Error('Incomplete frame '+k);
-   return Promise.all([decode(blob.slice(4,4+length,n>396?'image/webp':'image/jpeg'),k),
-                       decode(blob.slice(4+length),k)]);
-  });
-  item.promise=Promise.all([plate,layers]).then(([p,[wall,field]])=>{
+  const directory=new URLSearchParams(location.search).get('field')==='fine'?'camera/':'camera-fast/';
+  item.promise=get(directory+k+'.bin',signal,priority).then(async blob=>{
+   const header=async at=>new DataView(await blob.slice(at,at+4).arrayBuffer()).getUint32(0,true);
+   const plateEnd=4+await header(0),wallEnd=plateEnd+4+await header(plateEnd);
+   if(plateEnd<=4||wallEnd<=plateEnd+4||wallEnd>=blob.size)throw Error('Incomplete camera '+k);
+   return Promise.all([blob.slice(4,plateEnd),blob.slice(plateEnd+4,wallEnd),blob.slice(wallEnd)]
+     .map(layer=>decode(layer,k)));
+  }).then(([p,wall,field])=>{
    signal.throwIfAborted?.();item.ready=true;trim();return [p,wall,field];
   }).catch(err=>{if(cache.get(n)===item)cache.delete(n);controller.abort();throw err});
   cache.set(n,item);trim();return item.promise;
@@ -570,7 +567,7 @@ const frameBuffer=(()=>{
     try{await entry(n,true)}catch{return}
    }
   }
-  timer=setTimeout(run,transporting||moved?0:40);
+  timer=setTimeout(run,transporting?0:moved?55:120);
  }
  return {entry,aim,warm,stats,inspect:()=>({keys:[...cache.keys()],ready:[...cache].filter(([,e])=>e.ready).map(([n])=>n),budget:limit,...stats})};
 })();
@@ -654,6 +651,9 @@ const gasDetail=(()=>{
   const timer=setTimeout(()=>{showProgress=true;status()},1200);
   try{
    while(state.parts<state.total&&!window.gasRecording&&!window.stillJourney){
+    if(window.studyLayersActive===false || window.showPeptides===false&&!window.showRibbons || performance.now()-(window.studyInputTime||0)<500){
+     await new Promise(resolve=>setTimeout(resolve,160));continue;
+    }
     if(document.hidden){await new Promise(resolve=>document.addEventListener('visibilitychange',resolve,{once:true}));continue}
     await new Promise(resolve=>setTimeout(resolve,16));
     let block;
@@ -820,8 +820,8 @@ function draw(){
  scalar('opacity',state.gas*($('view').value==='gas'?1.25:1.05));scalar('pointPass',1);gl.bindBuffer(gl.ARRAY_BUFFER,dotBuffer);attr(0,4,32,0);attr(1,4,32,16);
  gl.bindBuffer(gl.ARRAY_BUFFER,pushBuffer);attr(2,4,16,0);gl.drawArraysInstanced(gl.TRIANGLE_STRIP,0,4,data.particleCount);
  lungParticles.draw(state,bloom,focus);}
-    gasPass(0);
-    if(focus[3]>.002){
+    if(state.gas>.001 && (window.showRibbons!==false||window.showPeptides!==false))gasPass(0);
+    if(state.gas>.001 && focus[3]>.002){
       const h=canvas.height,w=canvas.width,r=Math.ceil(h*focus[2])+2;
       gl.enable(gl.SCISSOR_TEST);
       gl.scissor(Math.floor(focus[0]*w)-r,Math.floor((1-focus[1])*h)-r,2*r+1,2*r+1);
@@ -942,7 +942,7 @@ const breath=(()=>{
    uniform float useAccent; uniform vec2 opacity;
    out vec4 color;
    void main(){
-    vec2 uv=vec2(gl_FragCoord.x/1920.,1.-gl_FragCoord.y/1080.);
+    vec2 uv=vec2(gl_FragCoord.x/960.,1.-gl_FragCoord.y/540.);
     vec2 d=breathOffset(uv);
     float feather=smoothstep(0.,.24,length(d*vec2(1920.,1080.)));
     if(feather<=0.)discard;
@@ -1006,7 +1006,7 @@ const breath=(()=>{
 
 function raf(now){
  if(window.stillJourney)return;if(!last)last=now;const dt=Math.min(.075,(now-last)/1000);last=now;
- if(ready&&inView&&!document.hidden&&!window.captureMode&&(!window.journeyOutside||window.journeyGasBridge)){
+ if(ready&&window.studyLayersActive!==false&&inView&&!document.hidden&&!window.captureMode&&(!window.journeyOutside||window.journeyGasBridge)){
   if(playing)window.studyClock.advance(dt);
   breath.tick(now,playing);
   if(playing){
@@ -1016,7 +1016,7 @@ function raf(now){
    else if(mode==='fill'&&(frame>timing.holdEnd||completedHold))fillTime+=dt;
   }
   if(breath.enabled&&(playing||window.journeySequencePlaying))time+=dt*breath.speed*window.studyClock.speed(now);
-  const returning=window.lastPush;cursorStep(dt);if(breath.enabled||playing||pointer.inside||returning||window.lastPush||lungParticles.relaxing())draw();
+  const returning=window.lastPush;cursorStep(dt);if(playing||pointer.inside||returning||window.lastPush||lungParticles.relaxing())draw();
  }
  requestAnimationFrame(raf)
 }
@@ -1058,7 +1058,7 @@ async function init(){
  while(!window.gasRecording&&firstTarget!==window.gasStartFrame&&!embedded);
  if(window.gasRecording)return;
  if(!embedded&&mode==='fill'&&entry.has('fill')&&first>timing.holdEnd){const t=Number(entry.get('fill'));if(Number.isFinite(t)){fillTime=Math.min(39.99,Math.max(0,t));draw()}}
- performance.mark('lung-interactive');gasDetail.finish();if(autoStart){setPlaying(true);transport=null;autoplayPending=false}
+ window.studyInputTime=performance.now();performance.mark('lung-interactive');gasDetail.finish();if(autoStart){setPlaying(true);transport=null;autoplayPending=false}
  requestAnimationFrame(raf);
  if(embedded)parent.postMessage({airway:'ready'},'*');
 }
@@ -1071,7 +1071,7 @@ $('strength').oninput=()=>{const factor=cue().wall;if(factor>0)wallSetting=Math.
 for(const id of ['mist','view'])$(id).oninput=()=>{applyView();draw()};
 $('export').onclick=e=>{if(!ready){e.preventDefault();return}draw();e.currentTarget.href=canvas.toDataURL('image/png');e.currentTarget.download='Gas_'+renderedKey+'_'+mode+'_'+Math.round(time*1000)+'ms.png'};
 window.bindGasInputs({scrub,play,playing:()=>playing,frame:()=>frame,requested:()=>requested,pointer,pointerPos});
-window.airwayStudy={redraw:draw,detail:gasDetail.state,buffer:frameBuffer.inspect,select,play,mode:chooseMode,replayOpening,setTime(t,depthTime=t){time=t;fillTime=depthTime;draw()},setPointer(x,y){pointer.x=x;pointer.y=y;pointer.inside=true;cursorStep(1/12);draw()},release(){pointer.inside=false},inspect(){return {ready,frame,profile:actualProfile,clock:time,fillTime,front:cue().front,wallOpacity:Number($('anatomy').style.opacity),gasOpacity:cue().gas,transport:!!transport,mode,playing,key:renderedKey,count:data.particleCount+lungParticles.capacity,peripheralCapacity:lungParticles.capacity,inherited:data.oldCount,drawn:nSmall+nLarge,displaced:window.lastPush||0,error:gl?.getError()}},
+window.airwayStudy={get ready(){return ready},get frame(){return frame},redraw:draw,detail:gasDetail.state,buffer:frameBuffer.inspect,select,play,mode:chooseMode,replayOpening,setTime(t,depthTime=t){time=t;fillTime=depthTime;draw()},setPointer(x,y){pointer.x=x;pointer.y=y;pointer.inside=true;cursorStep(1/12);draw()},release(){pointer.inside=false},inspect(){return {ready,frame,profile:actualProfile,clock:time,fillTime,front:cue().front,wallOpacity:Number($('anatomy').style.opacity),gasOpacity:cue().gas,transport:!!transport,mode,playing,key:renderedKey,count:data.particleCount+lungParticles.capacity,peripheralCapacity:lungParticles.capacity,inherited:data.oldCount,drawn:nSmall+nLarge,displaced:window.lastPush||0,error:gl?.getError()}},
  snapshot(){const c=document.createElement('canvas');c.width=canvas.width;c.height=canvas.height;const ctx=c.getContext('2d');ctx.fillStyle='#171717';ctx.fillRect(0,0,c.width,c.height);if(['ct','particles'].includes($('view').value)){ctx.globalAlpha=Number($('plate').style.opacity);ctx.drawImage(activeAssets[0],0,0,c.width,c.height);ctx.globalAlpha=Number($('anatomy').style.opacity);ctx.drawImage(activeAssets[1],0,0,c.width,c.height);ctx.globalAlpha=1}if($('view').value==='mask'){if(frame!==0)ctx.drawImage($('maskBase'),0,0,c.width,c.height)}else ctx.drawImage(canvas,0,0);return c.toDataURL('image/jpeg',.94)},
  homes(){return Array.from(dots.subarray(0,16))},positions(){return [33,293,718,1642,2916].map(j=>{const a=j*8,k=dots[a],t=(dots[a+1]+time*Math.max(.072,Math.min(.4,.0055/Math.max(.001,meta[k*4+2])))*dots[a+5])%1;return project(coords(k,t))})}};
 if(embedded)window.addEventListener('message',e=>{
