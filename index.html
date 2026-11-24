@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="dark">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Pulmo — Scroll pacing study</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="player.js" type="module"></script>
+</head>
+<body>
+  <div id="travel" aria-hidden="true"></div>
+  <main>
+    <header><div class="wordmark">Pulmo<span>/</span><h1>Scroll pacing study</h1></div><button id="edit" class="plain">View frame cut</button></header>
+    <section class="stage" aria-label="Anatomy preview">
+      <canvas id="picture" width="960" height="540" aria-label="Saved anatomical camera frame"></canvas>
+      <div class="readout"><span id="chapterText">Whole body</span><span id="frameText">Loading plates…</span></div>
+      <div id="status" role="status"></div>
+    </section>
+    <section class="deck" aria-label="Playback and comparison controls">
+      <div class="timeline"><span>Journey</span><input id="timeline" type="range" min="0" max="10000" value="0" aria-label="Journey position"><output id="percent">0%</output></div>
+      <div class="toolbar">
+        <div role="group" aria-label="Pacing method" class="methods">
+          <button data-method="even">Even frames</button><button data-method="log">Log · ¾ screen</button><button data-method="relaxed">Log · 1 screen</button><button data-method="detail">Detail emphasis</button>
+        </div>
+        <div class="actions"><button id="play" disabled>Play</button><button id="restart" class="plain">Restart</button><button id="preload" class="plain" title="Download all timing plates before comparing">Preload</button>
+          <select id="jump" aria-label="Jump to anatomy"><option value="">Jump to…</option><option value="0">Whole body</option><option value="174">Chest approach</option><option value="250">Lung detail</option><option value="396">Airway entry</option><option value="650">Airway interior</option><option value="956">Tissue approach</option><option value="1050">Bilayer approach</option><option value="1084">End of cut</option></select>
+        </div>
+      </div>
+      <p id="description">Scroll to zoom. Switch methods at the same frame.</p>
+    </section>
+  </main>
+  <dialog id="notes"><div class="notehead"><h2>The frame cut</h2><form method="dialog"><button>Close</button></form></div>
+    <p id="summary"></p>
+    <p>Each method uses the same saved camera images. The first scroll leaves the whole-body view. The lung detail keeps 21 sampled frames. Every frame from F0956 through F1084 stays in the cut.</p>
+    <p>These are 960 × 540 timing plates. The live breathing and particle overlays belong to the full viewer. The later material beyond this continuous run includes gaps.</p>
+    <table><thead><tr><th>Authored range</th><th>Selection</th></tr></thead><tbody id="cuts"></tbody></table>
+    <p>Each range includes both endpoints. Shared endpoints appear once.</p>
+    <a href="cut.json" download>Download exact frame IDs and calibration</a>
+  </dialog>
+</body>
+</html>
