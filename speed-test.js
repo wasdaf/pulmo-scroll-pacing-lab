@@ -3,7 +3,7 @@
 export function speedTest(view) {
   const button=document.getElementById('speedTest');
   const result=document.getElementById('speedResult');
-  const rates=[.25,.5,1,2,4,8,16], chapters=[250,650];
+  const rates=[.25,.5,1,2,4,8,16,32,64], chapters=[250,650];
   const raf=()=>new Promise(requestAnimationFrame);
   let current=null;
   function cancel(){
@@ -70,6 +70,7 @@ export function speedTest(view) {
         if(current===run)result.textContent='Preparing test frames · '+Math.round(done/total*100)+'%';
       });
       for(const rate of rates){
+        if(rate>16&&!passed.includes(rate/2))break;
         let ok=true;
         for(const chapter of chapters){
           if(current!==run)return;
@@ -81,7 +82,7 @@ export function speedTest(view) {
         if(ok)passed.push(rate);
       }
       const best=passed.at(-1),label=view.layer()==='live'?'Live layers':'Camera plates';
-      result.textContent=label+' · Cached routes. '+(best?'Fastest passing rate: '+best+' screens/s'+(best===16?' (test ceiling).':'.'):'No tested rate passed on both shots.')+
+      result.textContent=label+' · Cached routes. '+(best?'Fastest passing rate: '+best+' screens/s'+(best===rates.at(-1)?' (test ceiling).':'.'):'No tested rate passed on both shots.')+
         ' Passed: '+(passed.join(', ')||'none')+'.';
     }catch(err){if(current===run)result.textContent=err.message;}
     finally{

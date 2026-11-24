@@ -37,7 +37,7 @@
     <p id="summary"></p>
     <p>Each method uses the same saved camera images. The first scroll leaves the whole-body view. The lung detail keeps 21 sampled frames. Every frame from F0956 through F1084 stays in the cut.</p>
     <p>The live view uses the registered rib and diaphragm motion, airway masks, and particle paths for the selected camera. Breathing fades at the source camera’s close-up cutoff. Choose Camera plates in Settings to compare the saved images alone.</p>
-    <p>The speed test sweeps the lung and airway at 0.25 to 16 screens per second. A rate passes when each shot shows at least four camera changes, stays within 0.20 screens of the requested frame for 95% of the trial, has animation callback gaps at or below 50 ms for 95% of the time, and settles within 200 ms. The test downloads both short routes before timing. Measure my scroll records normal scrolling with the current cache.</p>
+    <p>The speed test sweeps the lung and airway at 0.25 to 16 screens per second. If 16 passes, it tries 32, then 64 if 32 passes. A rate passes when each shot shows at least four camera changes, stays within 0.20 screens of the requested frame for 95% of the trial, has animation callback gaps at or below 50 ms for 95% of the time, and settles within 200 ms. The test downloads both short routes before timing. Measure my scroll records normal scrolling with the current cache.</p>
     <table><thead><tr><th>Authored range</th><th>Selection</th></tr></thead><tbody id="cuts"></tbody></table>
     <p>Each range includes both endpoints. Shared endpoints appear once.</p>
     <a href="cut.json" download>Download exact frame IDs and calibration</a>
