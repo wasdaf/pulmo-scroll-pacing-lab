@@ -1,0 +1,1600 @@
+<!doctype html><html lang="en"><head><script src="study-clock.js"></script><script>
+    // A bare share link, including a return from sign-in, opens the full review.
+    const reviewURL=new URL(location.href);
+    if(!reviewURL.search){
+      reviewURL.search='frame=0&until=1260&paused=1&tour=1&full=1';
+      history.replaceState(null,'',reviewURL.href);
+    }
+    </script><style>main:has(#movie:not([hidden])) #scale{display:none}</style>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link rel="icon" href="data:,"><meta name="theme-color" content="#171717"><title>Lung flow · Pulmotherapeutics</title>
+<style>:root{color-scheme:dark;font-family:"Segoe UI",Arial,sans-serif;background:#171717;color:#f5f5f5}
+*{box-sizing:border-box}html,body,main{margin:0;width:100%;height:100%;overflow:hidden;overscroll-behavior:none}
+main{position:fixed;inset:0;height:100dvh;display:grid;place-items:center;touch-action:none}
+[hidden]{display:none!important}
+#stage{position:relative;width:min(100vw,177.777778vh);width:min(100vw,177.777778dvh);aspect-ratio:16/9;outline-offset:-3px;touch-action:none;overflow:hidden}
+#stage>img,#flow,#movie,.static{display:block;position:absolute;inset:0;width:100%;height:100%;object-fit:contain;pointer-events:none}
+#anatomy{opacity:0}#stage:focus:not(:focus-visible){outline:0}
+#scale{--weight:1px;position:absolute;left:3.75%;bottom:5.56%;color:#f5f5f5;line-height:1;pointer-events:none;font-weight:400;white-space:nowrap}
+#scale span{display:block;margin-bottom:.22em;text-shadow:0 0 2px #303030,0 1px 1px #454545}
+#scale i{display:block;height:var(--weight);background:currentColor;box-shadow:0 0 0 .65px #4a4a4a}
+#status{position:absolute;right:3%;top:3%;font-size:13px;padding:5px 9px;background:#171a1bf0;border-radius:4px}#status:empty{display:none}
+.nav,#movieControls{position:fixed;z-index:2;left:50%;transform:translateX(-50%);bottom:max(env(safe-area-inset-bottom),8px);display:flex;align-items:center;gap:9px;padding:4px 9px;border:1px solid #ffffff26;border-radius:22px;background:#171a1be8;color:#f4f4ed;max-width:calc(100vw - 16px)}
+button,summary,a,select{font:inherit;color:inherit}button,select,summary{border:0;background:transparent;cursor:pointer;font-size:13px}button,summary,.panel a,#movieControls a{padding:6px 4px;white-space:nowrap}a{text-underline-offset:3px}
+#journey{width:clamp(62px,20vw,280px);min-width:42px;height:24px;accent-color:#e2e7e2;margin:0}
+#frameLabel{font:11px/1.2 Consolas,monospace;white-space:nowrap}#play{min-width:42px}
+.panel{position:absolute;right:0;bottom:calc(100% + 7px);border:1px solid #ffffff30;border-radius:10px;background:#171a1bfa;width:max-content;max-width:calc(100vw - 18px);padding:12px;display:grid;gap:5px;font-size:13px;max-height:68dvh;overflow:auto;touch-action:pan-y}
+.panel label{display:flex;align-items:center;justify-content:space-between;gap:10px}.panel button,.panel a{text-align:left}.panel select{background:#232827;padding:5px;border-radius:4px}
+:focus-visible{outline:2px solid #d3e1d1}
+@media (max-aspect-ratio:1/1){.nav,#movieControls{bottom:auto;top:calc(50% + 28.125vw + 12px)}}
+@media (max-width:420px){.nav{gap:5px}#frameLabel{font-size:10px}.nav summary{font-size:12px}}
+@media (max-height:390px){.nav,#movieControls{bottom:max(3px,env(safe-area-inset-bottom));padding-block:0}}
+main{container-type:size;background:#171717}
+@supports(width:1cqw){#stage{width:min(100cqw,177.777778cqh);height:auto}}
+main:fullscreen,main:-webkit-full-screen{width:100%;height:100%;margin:0}
+@media(max-width:390px){.nav{gap:3px;padding-inline:6px}.nav button,.nav summary{padding-inline:2px}}
+</style><style>#scale i{width:100%;min-height:1px}</style><style>#scrollSettings{border:0;border-bottom:1px solid #ffffff35;padding:0 0 8px;margin:0 0 6px}
+#scrollSettings legend{font-weight:600;margin-bottom:7px}
+#scrollSettings label{display:grid;grid-template-columns:6.5em minmax(54px,1fr) 5em;gap:6px;min-height:29px}
+#scrollSettings input{width:100%;margin:0;accent-color:#cadfd3}
+#scrollSettings output{text-align:right;font-variant-numeric:tabular-nums}
+#resetScroll{text-decoration:underline}#blend{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+main.later #plate,main.later #anatomy,main.later #flow{visibility:hidden!important}
+main.later #play,main.later #replay,main.later #loopReplay,main.later label:has(#view),main.later label:has(#modeSelect),main.later label:has(#breathLook){display:none}
+@media (max-width:560px){.panel{position:fixed;right:0;max-height:min(48dvh,380px);width:min(290px,calc(100vw - 20px))}}
+@media(max-aspect-ratio:1/1){.panel{max-height:calc(50dvh + 28vw - 12px)}}
+#stage>#plate,#stage>#anatomy,#stage>#flow,#stage>#laterPlate{transform:scale(var(--camera-zoom,1))}
+main:not(.later) #stage>:is(#plate,#anatomy,#flow){translate:var(--scrub-x,0%) var(--scrub-y,0%)}
+#scale i{transform:scaleX(var(--camera-zoom,1));transform-origin:left}
+#scrollSettings .presetRow{display:flex;align-items:center;gap:6px;margin-block:5px;min-width:0}
+.presetRow select,.presetRow #presetName{flex:1;min-width:0;width:0}
+#scrollSettings #presetName{background:#222827;border:1px solid #ffffff45;border-radius:4px;color:inherit;padding:5px 7px;font:inherit}
+.presetRow button{min-width:28px;text-align:center;border:1px solid #ffffff38;border-radius:4px}
+#presetStatus,#particlePhase{display:block;color:#bad1c4;font-size:12px;text-align:left}
+#stage>#ecmMarkers{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;transform:scale(var(--camera-zoom,1))}
+main.gasBridge #stage>#plate,main.gasBridge #stage>#anatomy,main.gasBridge #stage>#flow{visibility:visible!important;transform:scale(calc(var(--bridge-zoom,1) * var(--camera-zoom,1)))}
+main.gasBridge #stage>#plate{filter:opacity(var(--ct-opacity,1))}
+main.gasBridge #stage>#anatomy{filter:opacity(var(--wall-opacity,1))}
+main.gasBridge #stage>#flow{opacity:var(--gas-opacity,1)}
+#stage{isolation:isolate}#stage>#nearParticles{z-index:1}#stage>#scale,#stage>#status{z-index:2!important}#nearParticles{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+#flowTrail{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+main:has(#movie:not([hidden])) #flowTrail{display:none}
+main:has(#movie:not([hidden])) #ecmMarkers{display:none}
+main.accentMode #stage>:is(#plate,#anatomy),main.accentMode #stage>#laterPlate:not([data-accent-plate]){filter:grayscale(1)}
+main.accentMode.gasBridge #stage>#plate{filter:grayscale(1) opacity(var(--ct-opacity,1))}
+main.accentMode.gasBridge #stage>#anatomy{filter:grayscale(1) opacity(var(--wall-opacity,1))}
+main.gasBridge #stage>:is(#plate,#anatomy,#flow){transform:translate(var(--bridge-x,0%),var(--bridge-y,0%)) scale(calc(var(--bridge-zoom,1) * var(--camera-zoom,1)))}
+#stage>#flowTrail,#stage>#ecmMarkers{transform:scale(var(--camera-zoom,1))}
+main.accentMode #stage>#approachInset:not([data-accent-plate]){filter:grayscale(1)}
+#stage.approachBridge>:is(#scale,#ecmMarkers){visibility:hidden}
+main.later.gasBridge #stage>:is(#plate,#anatomy){visibility:hidden!important}
+main.later.gasBridge #stage>#flow{transform:none;opacity:1}
+#approachTrail{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+#stage.registeredStep #flowTrail{visibility:hidden}
+#stage>canvas#approachInset{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+#playbackLoad:not([hidden]){position:absolute;top:12px;left:50%;transform:translateX(-50%);background:#141819e8;color:#fff;padding:6px 12px;border-radius:4px;font-size:13px;pointer-events:none;z-index:10}
+
+#viewerSwitch{position:fixed;z-index:20;top:max(2px,env(safe-area-inset-top));left:max(2px,env(safe-area-inset-left));width:44px;height:44px;display:grid;place-items:center;cursor:pointer;touch-action:manipulation}
+#showViewerUI{appearance:none;margin:0;width:13px;height:13px;border:1px solid #ffffffab;border-radius:3px;background:#16161694;box-shadow:0 0 2px #000;cursor:pointer}
+#showViewerUI:checked{appearance:auto;accent-color:#665e40}
+#showViewerUI:focus-visible{outline:2px solid white;outline-offset:4px}
+main:not(.viewerControls) :is(.nav,#status,#particlePhase,#playbackLoad,#movieControls,#journeyDownload){display:none!important}
+/* On narrow screens the checkpoint panel would cover the lower-left ruler. */
+@media (max-width: 820px) {
+  body > #journeyDownload { top: calc(48px + env(safe-area-inset-top, 0px)); bottom: auto; }
+}
+html.viewerControls #nl-badge-frame{top:env(safe-area-inset-top,0px)!important;left:max(46px,env(safe-area-inset-left))!important;bottom:auto!important;right:auto!important}
+html:not(.viewerControls) iframe:is([title="Powered by Netlify"],[title="Netlify"]){display:none!important}
+main.stillMode #stage>:is(#plate,#anatomy,#flow,#ecmMarkers,#nearParticles,#flowTrail,#blend,#approachInset,#approachTrail){display:none!important}
+main.stillMode #laterPlate{visibility:visible!important;display:block}
+</style><style>.nav,#viewerSwitch,#movieControls,#scale,#status,#playbackLoad,#hud{display:none!important} #stage{width:min(100vw,177.777778vh)!important;aspect-ratio:16/9}main{background:#101210}</style><script src="particle-optics-v004.js"></script></head><body>
+<main aria-label="Lung flow animation">
+<label id="viewerSwitch" title="Show animation controls and scene information"><input id="showViewerUI" type="checkbox" aria-label="Show animation controls and scene information"></label>
+<section id="stage" tabindex="0" aria-label="Lung flow. Scroll or swipe vertically to zoom. Touch a branch to move its particles.">
+<img id="laterPlate" hidden alt=""><img id="plate" fetchpriority="high" alt="" draggable="false"><img id="anatomy" alt="" draggable="false">
+<canvas id="flow" width="1920" height="1080" aria-label="Interactive gas in the airways"></canvas>
+<video id="movie" hidden muted playsinline loop preload="none" aria-label="Full lung flow recording from frame 0 through frame 1260"></video>
+<canvas id="flowTrail" width="960" height="540" aria-hidden="true" hidden></canvas><canvas id="ecmMarkers" width="1280" height="720" aria-hidden="true" hidden></canvas><canvas id="nearParticles" width="1280" height="720" aria-hidden="true" hidden></canvas><canvas id="blend" hidden aria-hidden="true"></canvas><div id="scale" role="img" aria-label="50 cm at the camera focus plane" style="width:14.316272126%;z-index:1;font-size:clamp(11px,1.25vw,24px)"><span>50 cm</span><i></i></div><span id="status" role="status">Loading lung flow…</span>
+</section><script>window.gasScale=[[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4925293093339462,0.5,"50 cm"],[3.4924865568038985,0.5,"50 cm"],[3.492192183857481,0.5,"50 cm"],[3.4914074718672343,0.5,"50 cm"],[3.489907848203444,0.5,"50 cm"],[3.487482967052429,0.5,"50 cm"],[3.4839369091688486,0.5,"50 cm"],[3.4790884476677952,0.5,"50 cm"],[3.472771353397096,0.5,"50 cm"],[3.464834715449693,0.5,"50 cm"],[3.4551432544010448,0.5,"50 cm"],[3.443577607926869,0.5,"50 cm"],[3.4300345705954514,0.5,"50 cm"],[3.4144272718476154,0.5,"50 cm"],[3.3966852784754713,0.5,"50 cm"],[3.376754610277182,0.5,"50 cm"],[3.3545976599813434,0.5,"50 cm"],[3.3301930109740234,0.5,"50 cm"],[3.303535148794202,0.5,"50 cm"],[3.2746340647543595,0.5,"50 cm"],[3.2435147523559142,0.5,"50 cm"],[3.210216599368401,0.5,"50 cm"],[3.1747926804902136,0.5,"50 cm"],[3.1373089573761885,0.5,"50 cm"],[3.0978433944730304,0.5,"50 cm"],[3.0564850005247512,0.5,"50 cm"],[3.0133328067769427,0.5,"50 cm"],[2.968494793809455,0.2,"20 cm"],[2.9220867795551206,0.2,"20 cm"],[2.8742312814174977,0.2,"20 cm"],[2.825056365489675,0.2,"20 cm"],[2.774694495711824,0.2,"20 cm"],[2.723281395403281,0.2,"20 cm"],[2.6709549329887947,0.2,"20 cm"],[2.61785404293364,0.2,"20 cm"],[2.5641176919359037,0.2,"20 cm"],[2.509883899328763,0.2,"20 cm"],[2.4552888194505638,0.2,"20 cm"],[2.4004658924786133,0.2,"20 cm"],[2.3455450689243342,0.2,"20 cm"],[2.2906521116814718,0.2,"20 cm"],[2.2359079782333233,0.2,"20 cm"],[2.181428284383488,0.2,"20 cm"],[2.12732284969864,0.2,"20 cm"],[2.0736953237595905,0.2,"20 cm"],[2.0206428913227317,0.2,"20 cm"],[1.9682560536090619,0.2,"20 cm"],[1.9166184821692576,0.2,"20 cm"],[1.865806941125486,0.2,"20 cm"],[1.8158912730646737,0.2,"20 cm"],[1.7669344434515457,0.2,"20 cm"],[1.718992638139635,0.2,"20 cm"],[1.6721154083778287,0.2,"20 cm"],[1.6263458576308027,0.2,"20 cm"],[1.581720864545405,0.2,"20 cm"],[1.5382713364906986,0.2,"20 cm"],[1.4960224882668844,0.2,"20 cm"],[1.4549941408065148,0.2,"20 cm"],[1.415201034969327,0.2,"20 cm"],[1.3766531558490978,0.2,"20 cm"],[1.3393560633571526,0.2,"20 cm"],[1.303311225213017,0.2,"20 cm"],[1.268516348849293,0.2,"20 cm"],[1.2349657091178967,0.2,"20 cm"],[1.202650469061094,0.2,"20 cm"],[1.1715589913773072,0.2,"20 cm"],[1.1416771385641304,0.1,"10 cm"],[1.1129885600545637,0.1,"10 cm"],[1.0854749649747033,0.1,"10 cm"],[1.0591163794393355,0.1,"10 cm"],[1.0338913875645406,0.1,"10 cm"],[1.009777355612894,0.1,"10 cm"],[0.9867506388965753,0.1,"10 cm"],[0.9647867712469709,0.1,"10 cm"],[0.9438606370171461,0.1,"10 cm"],[0.9239466257164058,0.1,"10 cm"],[0.9050187694858869,0.1,"10 cm"],[0.8870508637120006,0.1,"10 cm"],[0.8700165711425589,0.1,"10 cm"],[0.8538895099202637,0.1,"10 cm"],[0.8386433259821653,0.1,"10 cm"],[0.8242517502936144,0.1,"10 cm"],[0.8106886413933455,0.1,"10 cm"],[0.7979280137248087,0.1,"10 cm"],[0.7859440522200193,0.1,"10 cm"],[0.7747111135878966,0.1,"10 cm"],[0.7642037147421459,0.1,"10 cm"],[0.7543965087859197,0.1,"10 cm"],[0.7452642489544573,0.1,"10 cm"],[0.7367817409051234,0.1,"10 cm"],[0.7289237837387977,0.1,"10 cm"],[0.7216651001405829,0.1,"10 cm"],[0.7149802560435059,0.1,"10 cm"],[0.7088435702492513,0.1,"10 cm"],[0.7032290144880272,0.1,"10 cm"],[0.6981101044680303,0.1,"10 cm"],[0.6934597825572824,0.1,"10 cm"],[0.6892502928592593,0.1,"10 cm"],[0.6854530495926031,0.1,"10 cm"],[0.682038499866471,0.1,"10 cm"],[0.6789759821601218,0.1,"10 cm"],[0.6762335820702369,0.1,"10 cm"],[0.6737779871840518,0.1,"10 cm"],[0.6715743432718856,0.1,"10 cm"],[0.6695861143688788,0.1,"10 cm"],[0.6677749497315497,0.1,"10 cm"],[0.6661005611069558,0.1,"10 cm"],[0.664520614235514,0.1,"10 cm"],[0.6629906390153459,0.1,"10 cm"],[0.6614716729935165,0.1,"10 cm"],[0.6599541501136972,0.1,"10 cm"],[0.6584361544490511,0.1,"10 cm"],[0.6569159057992627,0.1,"10 cm"],[0.6553917561809763,0.1,"10 cm"],[0.6538621863874151,0.1,"10 cm"],[0.6523258026066516,0.1,"10 cm"],[0.6507813330890734,0.1,"10 cm"],[0.6492276248557648,0.1,"10 cm"],[0.6476636404404622,0.1,"10 cm"],[0.6460884546588038,0.1,"10 cm"],[0.6445012513994228,0.1,"10 cm"],[0.6429013204323306,0.1,"10 cm"],[0.6412880542308019,0.1,"10 cm"],[0.639660944803748,0.1,"10 cm"],[0.6380195805361975,0.1,"10 cm"],[0.6363636430362213,0.1,"10 cm"],[0.6346929039871217,0.1,"10 cm"],[0.6330072220043725,0.05,"5 cm"],[0.631306539497144,0.05,"5 cm"],[0.629590879534855,0.05,"5 cm"],[0.6278603427194465,0.05,"5 cm"],[0.6261151040645679,0.05,"5 cm"],[0.6243554098830694,0.05,"5 cm"],[0.6225815746845851,0.05,"5 cm"],[0.6207939780851456,0.05,"5 cm"],[0.6189930617310365,0.05,"5 cm"],[0.6171793262392266,0.05,"5 cm"],[0.6153533281569056,0.05,"5 cm"],[0.6135156769426886,0.05,"5 cm"],[0.6116670319722064,0.05,"5 cm"],[0.6098080995707762,0.05,"5 cm"],[0.6079396300759116,0.05,"5 cm"],[0.6060624149324213,0.05,"5 cm"],[0.6041772838227851,0.05,"5 cm"],[0.6022851018354664,0.05,"5 cm"],[0.6003867666737395,0.05,"5 cm"],[0.5984832059075508,0.05,"5 cm"],[0.5965753742707148,0.05,"5 cm"],[0.5946642510057794,0.05,"5 cm"],[0.5927508372585937,0.05,"5 cm"],[0.5908361535245701,0.05,"5 cm"],[0.5889212371484115,0.05,"5 cm"],[0.5870071398788973,0.05,"5 cm"],[0.5850949254801697,0.05,"5 cm"],[0.5831856674007243,0.05,"5 cm"],[0.5812804465011654,0.05,"5 cm"],[0.5793803488415131,0.05,"5 cm"],[0.5774864635287184,0.05,"5 cm"],[0.5755998806247777,0.05,"5 cm"],[0.5737216891156621,0.05,"5 cm"],[0.5718529749410357,0.05,"5 cm"],[0.5699948190845724,0.05,"5 cm"],[0.568148295724444,0.05,"5 cm"],[0.5663144704433393,0.05,"5 cm"],[0.5644943984972256,0.05,"5 cm"],[0.5626891231417999,0.05,"5 cm"],[0.5608996740154614,0.05,"5 cm"],[0.5591270655773686,0.05,"5 cm"],[0.5573722955990772,0.05,"5 cm"],[0.5556363437079505,0.05,"5 cm"],[0.5539201699805055,0.05,"5 cm"],[0.552224713583604,0.05,"5 cm"],[0.5505508914612817,0.05,"5 cm"],[0.5488995970649194,0.05,"5 cm"],[0.5472716991242179,0.05,"5 cm"],[0.5456680404564601,0.05,"5 cm"],[0.5440894368112836,0.05,"5 cm"],[0.542536675748222,0.05,"5 cm"],[0.5410105155440798,0.05,"5 cm"],[0.5395116841271668,0.05,"5 cm"],[0.5380408780353378,0.05,"5 cm"],[0.5365987613947425,0.05,"5 cm"],[0.5351859649160543,0.05,"5 cm"],[0.5338030849050508,0.05,"5 cm"],[0.5324506822842,0.05,"5 cm"],[0.5311292816220744,0.05,"5 cm"],[0.5298393701672319,0.05,"5 cm"],[0.5285813968833342,0.05,"5 cm"],[0.5273557714821938,0.05,"5 cm"],[0.5261628634515154,0.05,"5 cm"],[0.5250030010740966,0.05,"5 cm"],[0.5238764704352986,0.05,"5 cm"],[0.5227835144157011,0.05,"5 cm"],[0.5217243316658168,0.05,"5 cm"],[0.5206990755599697,0.05,"5 cm"],[0.5197078531263762,0.05,"5 cm"],[0.5187507239507068,0.05,"5 cm"],[0.5178276990504421,0.05,"5 cm"],[0.5169387397175231,0.05,"5 cm"],[0.5160837563269102,0.05,"5 cm"],[0.5152626071088747,0.05,"5 cm"],[0.5144750968829805,0.05,"5 cm"],[0.5137209757519855,0.05,"5 cm"],[0.5129999377540353,0.05,"5 cm"],[0.5123116194718426,0.05,"5 cm"],[0.511655598597749,0.05,"5 cm"],[0.511031392453893,0.05,"5 cm"],[0.5104384564669978,0.05,"5 cm"],[0.5098761825976346,0.05,"5 cm"],[0.5093438977241741,0.05,"5 cm"],[0.5088408619820425,0.05,"5 cm"],[0.5083662670592889,0.05,"5 cm"],[0.5079192344499484,0.05,"5 cm"],[0.5074988136671451,0.05,"5 cm"],[0.5071039804184041,0.05,"5 cm"],[0.5067336347461673,0.05,"5 cm"],[0.506386599137125,0.05,"5 cm"],[0.5060616166045705,0.05,"5 cm"],[0.505757348748628,0.05,"5 cm"],[0.5054723737999541,0.05,"5 cm"],[0.5052051846531755,0.05,"5 cm"],[0.5049541868971905,0.05,"5 cm"],[0.5047176968501826,0.05,"5 cm"],[0.5044939396081496,0.05,"5 cm"],[0.5042810471165885,0.05,"5 cm"],[0.5040770562759472,0.05,"5 cm"],[0.5038799070924469,0.05,"5 cm"],[0.5036874408868744,0.05,"5 cm"],[0.5034973985750432,0.05,"5 cm"],[0.5033078254482076,0.05,"5 cm"],[0.5031183236980478,0.05,"5 cm"],[0.5029288932976892,0.05,"5 cm"],[0.5027395342202676,0.05,"5 cm"],[0.5025502464389293,0.05,"5 cm"],[0.5023610299268302,0.05,"5 cm"],[0.5021718846571366,0.05,"5 cm"],[0.5019828106030233,0.05,"5 cm"],[0.5017938077376799,0.05,"5 cm"],[0.5016048760343013,0.05,"5 cm"],[0.5014160154660942,0.05,"5 cm"],[0.5012272260062752,0.05,"5 cm"],[0.5010385076280711,0.05,"5 cm"],[0.5008498603047188,0.05,"5 cm"],[0.5006612840094654,0.05,"5 cm"],[0.5004727787155678,0.05,"5 cm"],[0.5002843443962931,0.05,"5 cm"],[0.5000959810249184,0.05,"5 cm"],[0.49990768857473095,0.05,"5 cm"],[0.49971946701902803,0.05,"5 cm"],[0.499531316331117,0.05,"5 cm"],[0.4993432364843152,0.05,"5 cm"],[0.49915522745195007,0.05,"5 cm"],[0.4989672892073592,0.05,"5 cm"],[0.4987794217238882,0.05,"5 cm"],[0.4985916249748982,0.05,"5 cm"],[0.4984038989337548,0.05,"5 cm"],[0.498216243573836,0.05,"5 cm"],[0.4980286588685291,0.05,"5 cm"],[0.4978411447912319,0.05,"5 cm"],[0.4976537013153521,0.05,"5 cm"],[0.49746632841430716,0.05,"5 cm"],[0.497279026061525,0.05,"5 cm"],[0.49709179423044314,0.05,"5 cm"],[0.4969046328945093,0.05,"5 cm"],[0.4967175420271815,0.05,"5 cm"],[0.4965305216019268,0.05,"5 cm"],[0.49634357159222336,0.05,"5 cm"],[0.4961566919715586,0.05,"5 cm"],[0.4959698827134285,0.05,"5 cm"],[0.49578314379134436,0.05,"5 cm"],[0.49559647517882155,0.05,"5 cm"],[0.495409876849388,0.05,"5 cm"],[0.49522334877658114,0.05,"5 cm"],[0.4950368909339485,0.05,"5 cm"],[0.4948505032950474,0.05,"5 cm"],[0.4946641858334454,0.05,"5 cm"],[0.4944779385227198,0.05,"5 cm"],[0.494291761336458,0.05,"5 cm"],[0.4941056542482571,0.05,"5 cm"],[0.49391961723172445,0.05,"5 cm"],[0.49373365026047705,0.05,"5 cm"],[0.493547753308142,0.05,"5 cm"],[0.4933619263483563,0.05,"5 cm"],[0.49317616935476677,0.05,"5 cm"],[0.4929904823010306,0.05,"5 cm"],[0.49280486516081246,0.05,"5 cm"],[0.4926193179077926,0.05,"5 cm"],[0.4924338405156559,0.05,"5 cm"],[0.49224843295809895,0.05,"5 cm"],[0.492063095208828,0.05,"5 cm"],[0.4918778272415593,0.05,"5 cm"],[0.49169262903001926,0.05,"5 cm"],[0.4915075005479439,0.05,"5 cm"],[0.49187934437373426,0.05,"5 cm"],[0.49369058639094415,0.05,"5 cm"],[0.4945103552574942,0.05,"5 cm"],[0.4904777722130884,0.05,"5 cm"],[0.47955611803264053,0.05,"5 cm"],[0.46467174698487534,0.05,"5 cm"],[0.4517241453302314,0.05,"5 cm"],[0.44330136569493456,0.05,"5 cm"],[0.4392447071435591,0.05,"5 cm"],[0.43803960141946785,0.05,"5 cm"],[0.43792759237634693,0.05,"5 cm"],[0.43790849504907153,0.05,"5 cm"],[0.4377784186468878,0.05,"5 cm"],[0.4374366408616714,0.05,"5 cm"],[0.4367935115435833,0.05,"5 cm"],[0.43577066727778113,0.05,"5 cm"],[0.4343011172151033,0.05,"5 cm"],[0.4323293289027534,0.05,"5 cm"],[0.42981152869169575,0.05,"5 cm"],[0.42671540132925984,0.05,"5 cm"],[0.4230201757898247,0.05,"5 cm"],[0.4187161961213972,0.05,"5 cm"],[0.41380457812287436,0.05,"5 cm"],[0.4082964368678838,0.05,"5 cm"],[0.40221228588999336,0.05,"5 cm"],[0.39558096429915596,0.05,"5 cm"],[0.38843886430555036,0.05,"5 cm"],[0.38082847209794657,0.05,"5 cm"],[0.3727975953675463,0.05,"5 cm"],[0.36439794710169093,0.05,"5 cm"],[0.3556840512426352,0.05,"5 cm"],[0.3467120625156373,0.05,"5 cm"],[0.33753877937608817,0.05,"5 cm"],[0.32822059258362807,0.05,"5 cm"],[0.3188125625222892,0.05,"5 cm"],[0.3093676896396785,0.05,"5 cm"],[0.2999362492591739,0.05,"5 cm"],[0.29056521222280446,0.05,"5 cm"],[0.2812978801108417,0.05,"5 cm"],[0.27217349900372034,0.02,"2 cm"],[0.263227130736011,0.02,"2 cm"],[0.25448958852340753,0.02,"2 cm"],[0.24598735113204234,0.02,"2 cm"],[0.23774269162451306,0.02,"2 cm"],[0.22977378464823797,0.02,"2 cm"],[0.22209489955449582,0.02,"2 cm"],[0.2147165720597948,0.02,"2 cm"],[0.20764592611093874,0.02,"2 cm"],[0.20088690991940927,0.02,"2 cm"],[0.19444053199574796,0.02,"2 cm"],[0.18830507572626706,0.02,"2 cm"],[0.18247654998414278,0.02,"2 cm"],[0.17694861402756623,0.02,"2 cm"],[0.17171312467035652,0.02,"2 cm"],[0.16676011482428957,0.02,"2 cm"],[0.16207799734697353,0.02,"2 cm"],[0.1576533611939735,0.02,"2 cm"],[0.15347145421641092,0.02,"2 cm"],[0.14951664450089241,0.02,"2 cm"],[0.14577216287745653,0.02,"2 cm"],[0.1422201565637514,0.02,"2 cm"],[0.13884174280921255,0.02,"2 cm"],[0.13561700889506298,0.02,"2 cm"],[0.13252502286314854,0.02,"2 cm"],[0.1295439193466225,0.02,"2 cm"],[0.1266508888411098,0.02,"2 cm"],[0.12382306819805773,0.02,"2 cm"],[0.12104148883621746,0.02,"2 cm"],[0.11829078706308427,0.02,"2 cm"],[0.11555841014106702,0.01,"1 cm"],[0.1128343802531061,0.01,"1 cm"],[0.11011110138363354,0.01,"1 cm"],[0.10738310182651988,0.01,"1 cm"],[0.10464685179486981,0.01,"1 cm"],[0.10190058103081794,0.01,"1 cm"],[0.09914404277114665,0.01,"1 cm"],[0.09637838500125956,0.01,"1 cm"],[0.09360594660730616,0.01,"1 cm"],[0.09083005352830631,0.01,"1 cm"],[0.08805487928128818,0.01,"1 cm"],[0.08528525720666613,0.01,"1 cm"],[0.08252652490012527,0.01,"1 cm"]];
+(()=>{
+ const params=new URLSearchParams(location.search);
+ const normalize=n=>Math.max(0,Math.min(446,Math.round(Number(n)||0)));
+ const key=n=>String(n).padStart(4,'0');
+ const source=n=>n>396?'volume/'+key(n)+'-ct.webp':'plates/'+key(n)+'.jpg';
+ const first=window.gasStartFrame=normalize(params.get('frame'));
+ const plate=document.getElementById('plate'),stage=document.getElementById('stage'),scale=document.getElementById('scale');
+ function label(n){
+  const [field,metres,name]=window.gasScale[n];
+  scale.style.width=(100*metres/field)+'%';scale.firstElementChild.textContent=name;
+  scale.setAttribute('aria-label',name+' at the camera focus plane');
+  document.getElementById('frameLabel')?.replaceChildren('F'+key(n));
+ }
+ if(!params.has('video')){
+                          plate.dataset.plateSource=source(first);
+                          plate.src=first===0?'data:image/jpeg;base64,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':source(first);}
+ label(first);
+ window.gasEarlySeek=async n=>{
+  n=normalize(n);if(window.gasStartFrame===n)return;
+  window.gasStartFrame=n;const im=new Image();im.src=source(n);
+  try{await im.decode()}catch{return}
+  if(window.gasStartFrame!==n||window.airwayStudy?.inspect().ready||window.gasRecording)return;
+  im.id='plate';im.alt='';im.draggable=false;
+  stage.querySelector('#plate').replaceWith(im);label(n);
+  window.showGasScale?.(n);
+ };
+ document.addEventListener('DOMContentLoaded',()=>{
+  if(!window.airwayStudy?.inspect().ready){
+   document.getElementById('timeline').value=window.gasStartFrame;
+   document.getElementById('frameLabel').textContent='F'+key(window.gasStartFrame);
+  }
+  document.getElementById('timeline').addEventListener('input',e=>{
+   if(!window.airwayStudy?.inspect().ready)window.gasEarlySeek(e.target.value);
+  });
+ });
+})();
+</script>
+<div class="nav" aria-label="Animation controls">
+<button id="play" type="button" aria-pressed="true">Pause</button>
+<input id="timeline" hidden type="range" min="0" max="446" value="0"><input id="journey" type="range" min="0" max="446" step="1" value="0" aria-label="Zoom frame">
+<output id="frameLabel" for="journey">F0000</output>
+<button type="button" data-fullscreen hidden>Full screen</button><details id="options"><summary>Options</summary><div class="panel">
+<label>Saved native frames <select id="nativeFrames"><option value="">Choose a saved frame</option></select></label>
+<label>Playback timing <select id="nativeTiming"><option value="saved">Saved frame clock</option><option value="study">Authored retime · comparison</option></select></label>
+<output id="nativeEvidence" aria-live="polite"></output>
+<label>Colour <select id="palette"><option value="accent">Graphite + gold</option><option value="original">Original colours</option></select></label>
+<fieldset id="scrollSettings"><legend>Scroll feel</legend>
+<div class="presetRow"><button type="button" id="prevPreset" aria-label="Previous scroll preset">‹</button><select id="scrollPreset" aria-label="Scroll preset"></select><button type="button" id="nextPreset" aria-label="Next scroll preset">›</button></div>
+<label>Sensitivity <input data-setting="sensitivity" type="range" min=".25" max="3" step=".05" value="1"><output></output></label>
+<label>Acceleration <input data-setting="acceleration" type="range" min="0" max="3" step=".05" value="1"><output></output></label>
+<label>Max speed <input data-setting="speed" type="range" min="2" max="72" step="1" value="72"><output></output></label>
+<label>Coast distance <input data-setting="coast" type="range" min=".5" max="6" step=".25" value="2.5"><output></output></label>
+<label>Friction <input data-setting="friction" type="range" min=".5" max="12" step=".25" value="2"><output></output></label>
+<label>Damping <input data-setting="damping" type="range" min=".2" max="5" step=".05" value="1.2"><output></output></label>
+<div class="presetRow"><input type="text" id="presetName" maxlength="36" placeholder="Name your preset" aria-label="Preset name"><button id="savePreset" type="button">Save</button><button id="removePreset" type="button" hidden>Delete</button></div>
+<button id="resetScroll" type="button">Restore default feel</button><output id="presetStatus" role="status"></output></fieldset>
+<label>Particle transition <select id="particleTransition"><option value="guided">Particle continuation + ECM markers</option><option value="native">Particle continuation</option><option value="off">Original frames</option></select></label>
+<label>Peptide particles <input id="showPeptides" type="checkbox" checked></label>
+<label>Airflow ribbons <input id="showRibbons" type="checkbox" checked></label>
+<label>Foreground particles <input id="showForeground" type="checkbox" checked></label>
+<label>Resolved peptide shapes <input id="showConformers" type="checkbox" checked></label>
+<label>Particle density <select id="particleDensity"><option value="light">Light</option><option value="full">Full</option></select></label>
+<label>Show particle bounds <input id="flowBounds" type="checkbox"></label>
+<label>Cursor glow <input id="cursorGlow" type="checkbox" checked></label>
+<output id="particlePhase" aria-live="off"></output>
+<label>Breathing <select id="breathLook"><option value="both">Diaphragm + ribs</option><option value="dome">Diaphragm</option><option value="ribs">Ribs</option><option value="off">Off</option></select></label>
+<button id="sequencePlay" type="button" aria-pressed="false">Play frame sequence</button>
+
+<label>Flow <select id="modeSelect"><option value="zoom">Follow zoom</option><option value="fill">Loop filling</option><option value="steady">Steady flow</option></select></label>
+<label>View <select id="view"><option value="ct">Inside CT</option><option value="particles">Particles only</option></select></label>
+<button id="loopReplay" type="button">Replay fill</button><button id="replay" type="button">Replay opening</button>
+<a href="../reviews/revised-tissue-f1050-v1.html" target="_blank" rel="noopener">Review revised tissue · F1035–F1050 at 24 fps</a>
+<a href="../reviews/ecm-native-f1154-v1.html?revision=2&amp;view=latest1153" target="_blank" rel="noopener">Compare latest native stills and ECM controls</a>
+<a href="../reviews/slow-final-zoom-v1.html" target="_blank" rel="noopener">Slower final zoom: opening checkpoint</a>
+<a href="../reviews/selected-f1061-v1.html" target="_blank" rel="noopener">Inspect selected F1061 and edit times</a>
+<a href="../reviews/entry-f1076-v1.html" target="_blank" rel="noopener">Compare F1075 and F1076</a>
+<a href="../reviews/entry-f1075-v1.html" target="_blank" rel="noopener">Review F1075 entry and source images</a>
+<a href="tissue.html" id="tissue">Inspect alveoli in 3D</a><button type="button" id="watch">Watch earlier recording</button>
+<a href="https://doi.org/10.15151/ESRF-DC-572196058" rel="noreferrer">Human Organ Atlas scan</a>
+</div></details></div>
+<div id="movieControls" hidden><button type="button" data-fullscreen hidden>Full screen</button><button type="button" id="returnJourney">Back to scrolling</button><button id="moviePlay" type="button">Play recording</button><a href="lung-fill.mp4">Open video</a></div>
+<div hidden><span id="hud"></span><span id="phase"></span><span id="jump"></span><span id="mistValue"></span><span id="strengthValue"></span><img id="maskBase" alt="">
+<button id="camera"></button><button id="profile"></button><button id="steady"></button><button id="fill"></button><button id="zoom"></button><a id="export"></a><input id="mist" value="6"><input id="strength" value="30"></div>
+<noscript><a href="full-review-v055.mp4" download>Download the complete lung flow recording</a></noscript>
+</main><script>'use strict';
+(()=>{
+ const el=id=>document.getElementById(id),stage=el('stage'),scale=el('scale'),movie=el('movie');
+ let frameOnScreen=window.gasStartFrame,recording=false;
+ const frameText=n=>'F'+String(n).padStart(4,'0');
+ window.showGasScale=n=>{
+  window.redrawGoldNear?.();
+  if(window.journeyOutside && !recording)n=window.journeyOutside; if(recording)n=396;
+  frameOnScreen=n;const row=window.gasScale[n],width=stage.getBoundingClientRect().width;
+  if(!row||!width){scale.hidden=true;return}
+  const [field,metres,label]=row;
+  scale.firstElementChild.textContent=label;
+  scale.style.fontSize=Math.max(11,width*16/1280)+'px';
+  scale.style.setProperty('--weight',Math.max(1,width*3/1280)+'px');
+  scale.style.width=width*metres/field+'px';
+  scale.setAttribute('aria-label',label+' at the camera focus plane');scale.hidden=false;
+ };
+ window.syncGasControls=(n,mode)=>{
+  if(window.journeyOutside)return; el('journey').value=n; el('frameLabel').textContent=frameText(n);
+  el('timeline').setAttribute('aria-valuetext',frameText(n));
+  el('modeSelect').value=mode;el('tissue').hidden=n<430;
+ };
+ window.gasReady=()=>{if(!recording){el('status').textContent='';window.showGasScale(frameOnScreen)}};
+ const viewerUI=el('showViewerUI');
+ function showControls(visible){
+   viewerUI.checked=visible;
+   document.querySelector('main').classList.toggle('viewerControls',visible);
+   document.documentElement.classList.toggle('viewerControls',visible);
+   if(!visible)el('options').open=false;
+   if(window.frameElement)window.frameElement.dataset.controls=visible?'on':'off';
+   if(parent!==window)parent.postMessage({type:'pulmo-viewer-controls',visible},location.origin);
+ }
+ try{viewerUI.checked=localStorage.getItem('lung-flow.controls')==='on';}catch{}
+ showControls(viewerUI.checked);
+ viewerUI.onchange=()=>{showControls(viewerUI.checked);try{localStorage.setItem('lung-flow.controls',viewerUI.checked?'on':'off');}catch{}};
+ // A touch after inertial page scrolling may deliver pointerup without click.
+ // Activate a stationary tap once; retain native keyboard and mouse handling.
+ const switchTarget=el('viewerSwitch');let switchTouch=null,lastSwitchTap=-Infinity;
+ switchTarget.addEventListener('pointerdown',e=>{
+   if(e.pointerType==='touch')switchTouch={id:e.pointerId,x:e.clientX,y:e.clientY};
+ });
+ switchTarget.addEventListener('pointercancel',()=>{switchTouch=null});
+ switchTarget.addEventListener('pointerup',e=>{
+   const tap=switchTouch;switchTouch=null;
+   if(!tap||tap.id!==e.pointerId||Math.hypot(tap.x-e.clientX,tap.y-e.clientY)>8)return;
+   lastSwitchTap=performance.now();viewerUI.click();e.preventDefault();
+ });
+ switchTarget.addEventListener('click',e=>{
+   if(e.isTrusted&&e.detail!==0&&performance.now()-lastSwitchTap<700)e.preventDefault();
+ },true);
+ el('returnJourney').onclick=()=>{
+   movie.pause();
+   const url=new URL(location.href);url.searchParams.delete('video');url.searchParams.set('frame',stage.dataset.displayedFrame||'0');
+   location.replace(url);
+ };
+ window.showGasMovie=()=>{
+  window.unlockGoldJourney();
+  if(recording)return;showControls(true);if(window.frameElement)window.frameElement.dataset.journeyEdge='movie';recording=true;window.gasRecording=true;el('laterPlate').hidden=true;el('blend').hidden=true;window.captureMode=true;
+  document.querySelector('.nav').hidden=true;el('movieControls').hidden=false;
+  for(const id of ['flow','anatomy','plate'])el(id).hidden=true;
+  el('status').textContent='';movie.hidden=false;movie.controls=true;movie.loop=false;const clip='full-review-v055';movie.poster=clip+'.jpg';movie.dataset.file=clip+'.mp4';document.querySelector('#movieControls a').href=movie.dataset.file;window.showGasScale(396);
+  void loadMovie(!matchMedia('(prefers-reduced-motion: reduce)').matches);
+ };
+ async function loadMovie(autoplay){
+      const button=el('moviePlay');button.disabled=true;
+      try{
+        if(!movie.src)movie.src=previewBuffer.url(movie.dataset.file);
+        if(autoplay)await movie.play();
+      }catch{button.textContent='Retry recording';}finally{button.disabled=false;}
+    }
+    el('moviePlay').onclick=()=>movie.paused?loadMovie(true):movie.pause();
+ for(const event of ['play','pause'])movie.addEventListener(event,()=>{el('moviePlay').textContent=movie.paused?'Play recording':'Pause recording'});
+ el('watch').onclick=window.showGasMovie;
+ el('modeSelect').onchange=e=>{window.airwayStudy?.mode(e.target.value);el('options').open=false};
+ for(const id of ['loopReplay','replay','view'])el(id).addEventListener('click',e=>{if(e.target.tagName==='BUTTON')el('options').open=false});
+ document.addEventListener('pointerdown',e=>{if(e.target.closest('#movieControls'))el('options').open=false});
+ if(window.ResizeObserver)new ResizeObserver(()=>window.showGasScale(frameOnScreen)).observe(stage);
+ else window.addEventListener('resize',()=>window.showGasScale(frameOnScreen));
+ // Keep compressed media for the selected playback range. Only the small frame
+// window maintained by the player needs decoded images and GPU textures.
+const previewBuffer=window.previewBuffer=(()=>{
+  const items=new Map();
+  let active=null;
+  const status=document.createElement('output');
+  status.id='playbackLoad';status.setAttribute('role','status');status.hidden=true;
+  stage.parentElement.append(status);
+  function cancel(){
+    active?.abort();active=null;status.hidden=true;
+  }
+  function pinned(file){return items.get(file)?.blob||window.goldDownloads?.blobs.get(file);}
+  function url(file){
+    let item=items.get(file);
+    if(!item?.blob&&pinned(file)){item={blob:pinned(file)};items.set(file,item)}
+    if(!item?.blob)return file;
+    item.url??=URL.createObjectURL(item.blob)+'#/'+file;
+    return item.url;
+  }
+  function nativeFiles(start,end){
+    const files=[];
+    for(let n=start;n<=end;n++){
+      const key=String(n).padStart(4,'0');
+      files.push(n>396?'volume/'+key+'-ct.webp':'plates/'+key+'.jpg','stream-v017/frames/'+key+'.bin');
+    }
+    if(files.length){
+      files.push('breath-regional-v003.gz');
+      files.push(...["stream-v017/detail-00.gz", "stream-v017/detail-01.gz", "stream-v017/detail-02.gz", "stream-v017/detail-03.gz", "stream-v017/detail-04.gz", "stream-v017/detail-05.gz", "stream-v017/detail-06.gz", "stream-v017/detail-07.gz", "stream-v017/detail-08.gz", "stream-v017/detail-09.gz", "stream-v017/detail-10.gz", "stream-v017/detail-11.gz", "stream-v017/detail-12.gz", "stream-v017/detail-13.gz", "stream-v017/detail-14.gz", "stream-v017/detail-15.gz", "stream-v017/detail-16.gz", "stream-v017/detail-17.gz", "stream-v017/detail-18.gz", "stream-v017/detail-19.gz", "stream-v017/detail-20.gz", "stream-v017/detail-21.gz", "stream-v017/detail-22.gz", "stream-v017/detail-23.gz"]);
+    }
+    return files;
+  }
+  async function prepare(files,progress){
+    cancel();
+    const controller=active=new AbortController();
+    const selected=new Set(files);
+    // Replaying a shorter range or switching views can use the full download.
+    if([...selected].every(file=>pinned(file))){
+      active=null;progress?.(100);return;
+    }
+    for(const [file,item] of items)if(!selected.has(file)){
+      if(item.url)URL.revokeObjectURL(item.url.split('#')[0]);
+      items.delete(file);
+    }
+    const pending=[...selected].filter(file=>!pinned(file));
+    let done=selected.size-pending.length,index=0,lastPercent=-1;
+    const update=()=>{
+      if(active!==controller)return;
+      const value=Math.floor(100*done/Math.max(1,selected.size));
+      if(value===lastPercent)return;
+      lastPercent=value;
+      status.hidden=false;status.textContent='Loading preview · '+value+'%';progress?.(value);
+    };
+    update();
+    try{
+      async function worker(){
+        while(index<pending.length){
+          const file=pending[index++];
+          const response=await fetch(file,{signal:controller.signal,cache:'force-cache'});
+          if(!response.ok)throw Error('Could not load '+file);
+          const blob=await response.blob();
+          controller.signal.throwIfAborted();
+          if(!blob.size)throw Error('Empty preview asset '+file);
+          items.set(file,{blob});done++;update();
+        }
+      }
+      await Promise.all(Array.from({length:Math.min(5,pending.length)},worker));
+      controller.signal.throwIfAborted();
+      if(active===controller){status.hidden=true;active=null;}
+    }catch(err){
+      if(active===controller){
+        controller.abort();active=null;
+        status.hidden=false;status.textContent='Preview download interrupted. Press Play to retry.';
+      }
+      throw err;
+    }
+  }
+  return {prepare,cancel,pinned,url,nativeFiles,seed(file,blob){items.set(file,{blob})}};
+})();
+
+// A single sampling pass for both photographs. At the viewport boundary use
+// the photograph that actually covers the pixel under the interpolated pose.
+let zoomSurface;
+function registeredSurface(a,b){
+  if(zoomSurface===undefined){
+    const c=document.createElement('canvas');
+    const gl=c.getContext('webgl2',{alpha:false,antialias:false,depth:false,preserveDrawingBuffer:true});
+    zoomSurface=null;
+    if(gl){
+      const program=gl.createProgram();
+      for(const [type,code] of [[gl.VERTEX_SHADER,`#version 300 es
+        void main(){vec2 p=vec2((gl_VertexID<<1)&2,gl_VertexID&2);gl_Position=vec4(2.*p-1.,0,1);}`],
+        [gl.FRAGMENT_SHADER,`#version 300 es
+        precision highp float;
+        uniform sampler2D A,B;uniform vec2 size,pan,gray;
+        uniform float ratio,zoom,t;out vec4 color;
+        float coverage(vec2 p){vec2 edge=min(p,1.-p)*size;return smoothstep(0.,2.,min(edge.x,edge.y));}
+        void main(){
+          vec2 uv=vec2(gl_FragCoord.x/size.x,1.-gl_FragCoord.y/size.y);
+          vec2 a=.5+(uv-.5-pan*t)/zoom,b=.5+ratio*(a-.5)+pan;
+          vec3 left=texture(A,a).rgb,right=texture(B,b).rgb;
+          vec3 luma=vec3(.2126,.7152,.0722);
+          left=mix(left,vec3(dot(left,luma)),gray.x);right=mix(right,vec3(dot(right,luma)),gray.y);
+          float ca=coverage(a),cb=coverage(b);
+          float wa=(1.-t)*ca,wb=t*cb;
+          color=vec4(mix(left,right,wa+wb>.00001?wb/(wa+wb):t),1.);
+        }`]]){
+        const shader=gl.createShader(type);gl.shaderSource(shader,code);gl.compileShader(shader);gl.attachShader(program,shader);
+      }
+      gl.linkProgram(program);
+      if(gl.getProgramParameter(program,gl.LINK_STATUS)){
+        gl.useProgram(program);
+        const loc=Object.fromEntries(['size','pan','gray','ratio','zoom','t','A','B'].map(n=>[n,gl.getUniformLocation(program,n)]));
+        const slots=[0,1].map(()=>({tex:gl.createTexture(),src:null}));
+        const bind=(im,index,other)=>{
+          const slot=slots.find(s=>s.src===im.src)||slots.find(s=>s.src!==other.src);
+          gl.activeTexture(gl.TEXTURE0+index);gl.bindTexture(gl.TEXTURE_2D,slot.tex);
+          if(slot.src!==im.src){
+            for(const key of [gl.TEXTURE_MIN_FILTER,gl.TEXTURE_MAG_FILTER])gl.texParameteri(gl.TEXTURE_2D,key,gl.LINEAR);
+            for(const key of [gl.TEXTURE_WRAP_S,gl.TEXTURE_WRAP_T])gl.texParameteri(gl.TEXTURE_2D,key,gl.CLAMP_TO_EDGE);
+            gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,im);slot.src=im.src;
+          }
+        };
+        c.id='approachInset';c.dataset.accentPlate='true';c.setAttribute('aria-hidden','true');
+        c.addEventListener('webglcontextlost',()=>{zoomSurface=null;c.hidden=true;});
+        zoomSurface={canvas:c,bind(a,b){
+          const w=Math.max(1,Math.min(a.naturalWidth,Math.round(stage.clientWidth*devicePixelRatio)));
+          const h=Math.max(1,Math.round(w*stage.clientHeight/stage.clientWidth));
+          if(c.width!==w||c.height!==h){c.width=w;c.height=h;}
+          gl.viewport(0,0,w,h);bind(a,0,b);bind(b,1,a);
+          gl.uniform1i(loc.A,0);gl.uniform1i(loc.B,1);gl.uniform2f(loc.size,w,h);
+          gl.uniform2f(loc.gray,Number(window.flowAccent&&!a.dataset.accentPlate),Number(window.flowAccent&&!b.dataset.accentPlate));
+        },paint(step,t){
+          gl.uniform2f(loc.pan,step.dx,step.dy);gl.uniform1f(loc.ratio,step.z);
+          gl.uniform1f(loc.zoom,step.z**t);gl.uniform1f(loc.t,t);gl.drawArrays(gl.TRIANGLES,0,3);
+        }};
+      }
+    }
+  }
+  zoomSurface?.bind(a,b);
+  return zoomSurface;
+}
+
+const slider = el('journey');
+const main = stage.closest('main');
+const palette=el('palette'),accentFiles=new Map();
+try{palette.value=new URLSearchParams(location.search).get('palette')||localStorage.getItem('lung-flow.palette')||'accent';if(!palette.value)palette.value='accent';}catch{}
+function applyPalette(){
+  window.flowAccent=palette.value==='accent';
+  main.classList.toggle('accentMode',window.flowAccent);
+}
+applyPalette();
+for(const id of ['particleTransition','flowBounds','cursorGlow','nativeTiming']){
+  const input=el(id),key='lung-flow.'+id,check=input.type==='checkbox';
+  try{
+    const saved=localStorage.getItem(key);
+    if(check && saved!==null)input.checked=saved==='on';
+    else if(!check && Array.from(input.options).some(option=>option.value===saved))input.value=saved;
+  }catch{}
+  input.addEventListener('change',()=>{
+    try{localStorage.setItem(key,check?(input.checked?'on':'off'):input.value);}catch{}
+  });
+}
+const layerIds=['showPeptides','showRibbons','showForeground','showConformers'];
+for(const id of layerIds){
+  const input=el(id);
+  try{input.checked=localStorage.getItem('lung-flow.'+id)!=='off';}catch{}
+  window[id]=input.checked;
+  input.onchange=()=>{
+    window[id]=input.checked;
+    try{localStorage.setItem('lung-flow.'+id,input.checked?'on':'off');}catch{}
+    window.refreshPeptideLayers?.();
+  };
+}
+const limits = Array.from(document.querySelectorAll('[data-setting]'));
+const feel = {};
+const units = {sensitivity:'×', acceleration:'×', speed:' fps', coast:' frames',friction:' fr/s²',damping:' /s'};
+const storageKey = 'lung-flow.scroll.v1';
+function settings(saved = {}) {
+  for (const input of limits) {
+    const key = input.dataset.setting;
+    const value = saved[key];
+    input.value = Number.isFinite(value) ? value : input.defaultValue;
+    feel[key] = Number(input.value);
+    input.nextElementSibling.value = feel[key] + units[key];
+  }
+}
+try { settings(JSON.parse(localStorage.getItem(storageKey)) || {}); } catch { settings(); }
+function saveFeel(){try { localStorage.setItem(storageKey,JSON.stringify(feel)); } catch {}}
+const presetMenu=el('scrollPreset'), presetName=el('presetName');
+const presets=[
+  ['Original',1,1,12,2.5],['Frame study',.4,.15,4,.75],['Gentle glide',.65,.65,8,3.25],
+  ['Long coast',.9,.8,10,5.5],['Quick scan',1.4,1.8,18,2],['Short stop',1.15,.5,10,1]
+].map(([name,sensitivity,acceleration,speed,coast],i)=>({name,values:{sensitivity,acceleration,speed,coast,
+  friction:[2,8,1.5,.75,3,10][i],damping:[1.2,3,.9,.55,1.65,4][i]}}));
+let custom=[];
+try {
+  const saved=JSON.parse(localStorage.getItem('lung-flow.presets.v1'));
+  if(Array.isArray(saved))custom=saved.filter(p=>typeof p?.name==='string'&&p.name.trim()&&p.values)
+    .map(p=>({...p,values:{friction:2,damping:1.2,...p.values}})).filter(p=>limits.every(i=>Number.isFinite(p.values[i.dataset.setting])));
+}catch{}
+function refreshPresets(preferred){
+  const all=presets.concat(custom);
+  presetMenu.replaceChildren(...all.map((p,i)=>new Option(p.name,String(i))));
+  presetMenu.add(new Option('Custom settings','custom'));
+  const matches=p=>p&&limits.every(i=>p.values[i.dataset.setting]===feel[i.dataset.setting]);
+  const index=matches(all[preferred])?Number(preferred):all.findIndex(matches);
+  presetMenu.value=index<0?'custom':String(index);
+  const own=index>=presets.length;
+  el('removePreset').hidden=!own;
+  if(own)presetName.value=all[index].name;
+}
+function usePreset(i){
+  const p=presets.concat(custom)[i];
+  if(!p)return;
+  settings(p.values);saveFeel();refreshPresets(i);presetName.value=i>=presets.length?p.name:'';
+  el('presetStatus').textContent='';
+}
+presetMenu.onchange=()=>{if(presetMenu.value==='custom'){refreshPresets();return;} usePreset(Number(presetMenu.value));};
+for(const [id,offset] of [['prevPreset',-1],['nextPreset',1]])el(id).onclick=()=>{
+  const count=presets.length+custom.length;
+  const current=presetMenu.value==='custom'?(offset>0?-1:0):Number(presetMenu.value);
+  usePreset((current+offset+count)%count);
+};
+function writePresets(list){
+  try{localStorage.setItem('lung-flow.presets.v1',JSON.stringify(list));custom=list;return true;}
+  catch{el('presetStatus').textContent='Browser storage unavailable.';return false;}
+}
+el('savePreset').onclick=()=>{
+  const name=presetName.value.trim();
+  if(!name){presetName.focus();return;}
+  if(presets.some(p=>p.name.toLowerCase()===name.toLowerCase())){
+    el('presetStatus').textContent='Choose a name for your own preset.';return;
+  }
+  const list=custom.slice();
+  let i=list.findIndex(p=>p.name.toLowerCase()===name.toLowerCase());
+  if(i<0)i=list.length;
+  list[i]={name,values:{...feel}};
+  if(writePresets(list)){refreshPresets(presets.length+i);el('presetStatus').textContent='Saved on this browser.';}
+};
+el('removePreset').onclick=()=>{
+  const i=Number(presetMenu.value)-presets.length;
+  if(i<0||!Number.isInteger(i))return;
+  if(writePresets(custom.filter((_,k)=>k!==i))){presetName.value='';refreshPresets();el('presetStatus').textContent='Preset deleted.';}
+};
+refreshPresets();
+for(const input of limits) input.addEventListener('input',()=>{
+  settings({...feel,[input.dataset.setting]:Number(input.value)});saveFeel();refreshPresets();el('presetStatus').textContent='';
+});
+el('resetScroll').onclick=()=>usePreset(0);
+el('breathLook').onchange=e=>window.breathStudy?.choose(e.target.value);
+const endParam=new URLSearchParams(location.search).get('endFrame');
+const rangeEnd=endParam&&/^\d+$/.test(endParam)?Math.max(446,Number(endParam)):Infinity;
+window.goldRangeEnd=rangeEnd;
+const frameIds=Array.from({length:447},(_,n)=>n);
+const later=new Map();
+const markers=new Map(), storyBeats=new Map(), markerLayer=el('ecmMarkers'), transition=el('particleTransition');
+const smoothUnit=v=>{const t=Math.min(1,Math.max(0,v));return t*t*(3-2*t);};
+const flowSeeds=[[0.153125,0.06111111111111111,140],[0.184375,0.07222222222222222,65],[0.234375,0.027777777777777776,91],[0.284375,0.03888888888888889,98],[0.315625,0.06111111111111111,56],[0.371875,0.03888888888888889,114],[0.434375,0.05,100],[0.503125,0.027777777777777776,117],[0.528125,0.07222222222222222,75],[0.596875,0.03888888888888889,83],[0.640625,0.03888888888888889,76],[0.690625,0.06111111111111111,197],[0.740625,0.08333333333333333,60],[0.809375,0.07222222222222222,150],[0.859375,0.08333333333333333,46],[0.984375,0.07222222222222222,17],[0.090625,0.11666666666666667,16],[0.128125,0.11666666666666667,45],[0.190625,0.11666666666666667,121],[0.240625,0.16111111111111112,120],[0.284375,0.12777777777777777,64],[0.315625,0.09444444444444444,23],[0.384375,0.16111111111111112,17],[0.446875,0.15,115],[0.465625,0.1388888888888889,37],[0.515625,0.1388888888888889,56],[0.596875,0.15,43],[0.628125,0.1388888888888889,16],[0.684375,0.16111111111111112,51],[0.709375,0.1388888888888889,27],[0.784375,0.16111111111111112,29],[0.834375,0.16111111111111112,64],[0.884375,0.15,83],[0.921875,0.16111111111111112,12],[0.090625,0.18333333333333332,25],[0.190625,0.18333333333333332,73],[0.246875,0.19444444444444445,156],[0.259375,0.19444444444444445,130],[0.315625,0.19444444444444445,32],[0.396875,0.20555555555555555,14],[0.421875,0.18333333333333332,70],[0.484375,0.21666666666666667,85],[0.528125,0.21666666666666667,85],[0.603125,0.2388888888888889,56],[0.640625,0.18333333333333332,14],[0.703125,0.21666666666666667,57],[0.709375,0.17222222222222222,78],[0.803125,0.20555555555555555,26],[0.840625,0.22777777777777777,122],[0.884375,0.19444444444444445,35],[0.909375,0.18333333333333332,47],[0.996875,0.20555555555555555,12],[0.021875,0.25,16],[0.078125,0.25,110],[0.153125,0.29444444444444445,48],[0.171875,0.3055555555555556,31],[0.246875,0.29444444444444445,118],[0.303125,0.2833333333333333,131],[0.309375,0.29444444444444445,108],[0.359375,0.2611111111111111,80],[0.446875,0.2722222222222222,60],[0.471875,0.2833333333333333,43],[0.534375,0.2833333333333333,71],[0.603125,0.2722222222222222,60],[0.621875,0.2833333333333333,50],[0.665625,0.3055555555555556,29],[0.715625,0.2611111111111111,23],[0.778125,0.2722222222222222,50],[0.846875,0.25,111],[0.903125,0.3055555555555556,67],[0.971875,0.31666666666666665,24],[0.096875,0.35,55],[0.146875,0.3277777777777778,48],[0.190625,0.39444444444444443,16],[0.228125,0.35,157],[0.303125,0.38333333333333336,127],[0.340625,0.3277777777777778,118],[0.365625,0.35,129],[0.453125,0.3277777777777778,70],[0.465625,0.39444444444444443,24],[0.553125,0.3277777777777778,89],[0.565625,0.3277777777777778,70],[0.628125,0.3611111111111111,121],[0.690625,0.37222222222222223,58],[0.753125,0.38333333333333336,13],[0.796875,0.39444444444444443,81],[0.821875,0.35,11],[0.896875,0.35,88],[0.909375,0.39444444444444443,19],[0.146875,0.45,11],[0.184375,0.42777777777777776,82],[0.240625,0.46111111111111114,103],[0.296875,0.42777777777777776,14],[0.334375,0.40555555555555556,65],[0.378125,0.40555555555555556,112],[0.409375,0.4388888888888889,75],[0.496875,0.46111111111111114,23],[0.515625,0.4166666666666667,29],[0.590625,0.46111111111111114,141],[0.609375,0.4388888888888889,63],[0.659375,0.4388888888888889,44],[0.753125,0.4722222222222222,9],[0.778125,0.40555555555555556,29],[0.853125,0.4722222222222222,16],[0.903125,0.45,144],[0.940625,0.4722222222222222,95],[0.153125,0.5388888888888889,41],[0.203125,0.55,9],[0.246875,0.5277777777777778,103],[0.284375,0.5277777777777778,91],[0.340625,0.5277777777777778,75],[0.403125,0.49444444444444446,38],[0.415625,0.48333333333333334,158],[0.490625,0.5055555555555555,74],[0.553125,0.5388888888888889,77],[0.584375,0.5277777777777778,72],[0.615625,0.5055555555555555,72],[0.671875,0.5277777777777778,49],[0.709375,0.5388888888888889,90],[0.784375,0.5055555555555555,20],[0.821875,0.48333333333333334,122],[0.878125,0.48333333333333334,109],[0.946875,0.5166666666666667,73],[0.134375,0.6277777777777778,73],[0.190625,0.6277777777777778,45],[0.228125,0.5722222222222222,97],[0.271875,0.5722222222222222,44],[0.353125,0.5611111111111111,86],[0.378125,0.6277777777777778,176],[0.409375,0.5944444444444444,31],[0.496875,0.5944444444444444,64],[0.553125,0.5722222222222222,59],[0.559375,0.5611111111111111,78],[0.640625,0.5722222222222222,62],[0.696875,0.6166666666666667,76],[0.709375,0.5833333333333334,54],[0.784375,0.6277777777777778,24],[0.821875,0.5833333333333334,102],[0.859375,0.5833333333333334,99],[0.953125,0.6277777777777778,141],[0.146875,0.6388888888888888,26],[0.178125,0.6388888888888888,59],[0.234375,0.6388888888888888,99],[0.271875,0.6833333333333333,123],[0.309375,0.7055555555555556,71],[0.378125,0.6833333333333333,43],[0.434375,0.6833333333333333,15],[0.465625,0.6833333333333333,16],[0.553125,0.6611111111111111,37],[0.590625,0.7055555555555556,55],[0.634375,0.6388888888888888,46],[0.665625,0.7055555555555556,60],[0.734375,0.6944444444444444,48],[0.759375,0.6388888888888888,57],[0.846875,0.6388888888888888,64],[0.953125,0.6833333333333333,65],[0.965625,0.6944444444444444,20],[0.090625,0.7833333333333333,22],[0.153125,0.7388888888888889,31],[0.196875,0.7611111111111111,36],[0.215625,0.7277777777777777,89],[0.290625,0.75,94],[0.340625,0.7388888888888889,142],[0.371875,0.7611111111111111,102],[0.446875,0.7388888888888889,108],[0.478125,0.7388888888888889,17],[0.553125,0.7833333333333333,87],[0.578125,0.7722222222222223,85],[0.653125,0.7722222222222223,67],[0.678125,0.7166666666666667,29],[0.709375,0.75,44],[0.771875,0.7388888888888889,12],[0.834375,0.7166666666666667,15],[0.878125,0.7722222222222223,59],[0.921875,0.75,48],[0.959375,0.7166666666666667,17],[0.121875,0.8166666666666667,128],[0.196875,0.8611111111111112,73],[0.228125,0.8388888888888889,96],[0.296875,0.8388888888888889,100],[0.346875,0.7944444444444444,62],[0.390625,0.8388888888888889,116],[0.434375,0.7944444444444444,33],[0.471875,0.8055555555555556,93],[0.546875,0.8277777777777777,71],[0.571875,0.8055555555555556,49],[0.646875,0.8166666666666667,66],[0.703125,0.7944444444444444,72],[0.734375,0.85,29],[0.765625,0.8388888888888889,90],[0.840625,0.8166666666666667,72],[0.878125,0.8277777777777777,42],[0.915625,0.85,19],[0.103125,0.9388888888888889,10],[0.121875,0.9388888888888889,47],[0.184375,0.9388888888888889,114],[0.215625,0.8944444444444445,40],[0.296875,0.8833333333333333,84],[0.353125,0.8833333333333333,86],[0.371875,0.8722222222222222,76],[0.421875,0.8833333333333333,86],[0.496875,0.8944444444444445,108],[0.521875,0.9055555555555556,77],[0.603125,0.9055555555555556,32],[0.653125,0.9388888888888889,14],[0.671875,0.9055555555555556,48],[0.740625,0.8722222222222222,113],[0.796875,0.9055555555555556,87],[0.815625,0.9166666666666666,47],[0.865625,0.9055555555555556,8],[0.940625,0.8833333333333333,103],[0.959375,0.9388888888888889,73]].filter((_,i)=>i%2===0);
+const densityMenu=el('particleDensity');
+try{if(localStorage.getItem('lung-flow.density')==='full')densityMenu.value='full';}catch{}
+densityMenu.onchange=()=>{
+  try{localStorage.setItem('lung-flow.density',densityMenu.value);}catch{}
+  setTrail(trailFrame,transition.value!=='off');
+  if(cameraMotion?.scrub)paintCamera(cameraMotion,position%1);
+};
+const trail=el('flowTrail'),trailCtx=trail.getContext('2d');
+const ramp=(a,b,x)=>smoothUnit((x-a)/(b-a));
+const flowSpecs=new Map(),packetCache=new Map(),landingShots=new Map();
+const gridW=144,gridH=81,steps=6,words=1+2*steps;
+const maskBytes=Math.ceil(gridW*gridH/8);
+const maskCanvas=document.createElement('canvas');
+maskCanvas.width=gridW;maskCanvas.height=gridH;
+let activeField=null,activeMask=null,trailTick=0,trailLast=-Infinity,trailClock=0,trailWeight=0;
+let trailFrame=0,arrivalStart=-Infinity;
+const glowToggle=el('cursorGlow'),noGlow=[0,0,0,0];
+const cursor={x:0,y:0,level:0,over:false,tick:0,last:0};
+try{glowToggle.checked=localStorage.getItem('lung-flow.cursor-glow')!=='off';}catch{}
+function cursorForCanvas(canvas, interaction=false){
+  if(!cursor.level||(!interaction&&!glowToggle.checked)||recording)return noGlow;
+  const box=canvas.getBoundingClientRect();
+  if(!box.height||!box.width)return noGlow;
+  const radius=Math.max(46,Math.min(100,stage.clientHeight*.16));
+  return [(cursor.x-box.left)/box.width,(cursor.y-box.top)/box.height,radius/box.height,cursor.level];
+}
+window.cursorForCanvas=cursorForCanvas;
+function glowAt(f,x,y,w,h){
+  if(!f[3])return 0;
+  return f[3]*(1-smoothUnit(Math.hypot(x-w*f[0],y-h*f[1])/(f[2]*h)));
+}
+const goldStroke=(ctx,x,y,hot=false)=>journeyParticles.mixGold(
+  hot?[255,232,128]:[255,215,0],hot?[170,94,15]:[123,64,8],journeyParticles.gradeAt(ctx,x,y));
+function refreshGlow(now){
+  cursor.tick=0;
+  const target=cursor.over?1:0,dt=Math.min(80,Math.max(1,now-cursor.last));
+  cursor.last=now;
+  cursor.level=reduced.matches?target:cursor.level+(target-cursor.level)*(-Math.expm1(-dt/(target?52:76)));
+  if(Math.abs(target-cursor.level)<.008)cursor.level=target;
+  if(!document.hidden&&!recording){
+    window.redrawGoldNear?.();
+    if(!outside||window.journeyGasBridge)window.airwayStudy?.redraw();
+    if(trailFrame&&!trailTick)setTrail(trailFrame,transition.value!=='off');
+    if(cameraMotion?.scrub)paintCamera(cameraMotion,position%1);
+    if(!markerLayer.hidden)paintMarkers(outside);
+  }
+  if(cursor.level!==target)scheduleGlow();
+}
+function scheduleGlow(){if(!cursor.tick)cursor.tick=requestAnimationFrame(refreshGlow);}
+function releaseGlow(){cursor.over=false;scheduleGlow();}
+function pointGlow(e){
+  if(!e.isPrimary)return;
+  if(e.pointerType==='touch'&&!e.buttons){releaseGlow();return;}
+  const box=stage.getBoundingClientRect();
+  cursor.x=e.clientX;cursor.y=e.clientY;
+  cursor.over=e.clientX>=box.left&&e.clientX<=box.right&&e.clientY>=box.top&&e.clientY<=box.bottom;
+  scheduleGlow();
+}
+for(const type of ['pointermove','pointerdown','pointerenter'])stage.addEventListener(type,pointGlow);
+stage.addEventListener('pointerleave',releaseGlow);
+window.addEventListener('pointerup',e=>{if(e.pointerType!=='mouse')releaseGlow();});
+window.addEventListener('pointercancel',releaseGlow);
+window.addEventListener('blur',releaseGlow);
+glowToggle.onchange=()=>{
+  try{localStorage.setItem('lung-flow.cursor-glow',glowToggle.checked?'on':'off');}catch{}
+  scheduleGlow();
+};
+async function readField(n){
+  const spec=flowSpecs.get(n);
+  if(!spec?.paths)return null;
+  const pathBytes=(spec.particleCount||flowSeeds.length)*words*2;
+  let promise=packetCache.get(spec.paths);
+  if(!promise){
+    const saved=previewBuffer.pinned(spec.paths);
+    promise=(saved?Promise.resolve(new Response(saved)):fetch(spec.paths,{cache:'force-cache'})).then(async response=>{
+      if(!response.ok)throw Error('Missing particle paths');
+      const data=await new Response(response.body.pipeThrough(new DecompressionStream('gzip'))).arrayBuffer();
+      if(data.byteLength%(pathBytes+maskBytes))throw Error('Incomplete particle paths');
+      return data;
+    }).catch(err=>{packetCache.delete(spec.paths);throw err;});
+    packetCache.set(spec.paths,promise);
+    if(packetCache.size>5)packetCache.delete(packetCache.keys().next().value);
+  }
+  const data=await promise,offset=spec.index*(pathBytes+maskBytes);
+  return {coords:new Uint16Array(data,offset,pathBytes/2),mask:new Uint8Array(data,offset+pathBytes,maskBytes)};
+}
+function drawBounds(mask){
+  if(activeMask===mask)return;
+  activeMask=mask;
+  const ctx=maskCanvas.getContext('2d'),image=ctx.createImageData(gridW,gridH);
+  const wall=i=>mask[i>>3]&(1<<(i%8));
+  for(let i=0;i<gridW*gridH;i++){
+    if(!wall(i))continue;
+    const contour=i>gridW&&i<gridW*(gridH-1)&&(!wall(i-1)||!wall(i+1)||!wall(i-gridW)||!wall(i+gridW));
+    image.data.set(window.flowAccent?[215,215,215,contour?172:40]:[241,177,99,contour?172:40],i*4);
+  }
+  ctx.putImageData(image,0,0);
+}
+const recruitment=new Map(),landingCameras=new Map(),cameraAims=new Map();
+function drawSites(ctx,shot,elapsed,n){
+    if(!window.showPeptides)return false;
+    const focus=cursorForCanvas(ctx.canvas,true);
+    let moving=false;
+    for(const site of shot){
+      if(!site.visible)continue;
+      const progress=ramp(0,1,(elapsed-70*site.id)/980);
+      const path=site.path,index=progress*(path.length-1),k=Math.floor(index),f=index-k;
+      const a=path[k],b=path[Math.min(k+1,path.length-1)];
+      const x=(a[0]*(1-f)+b[0]*f)*ctx.canvas.width,y=(a[1]*(1-f)+b[1]*f)*ctx.canvas.height;
+      const alpha=a[2]*(1-f)+b[2]*f;
+      const hot=glowAt(focus,x,y,ctx.canvas.width,ctx.canvas.height);
+      journeyParticles.peptide(ctx,x,y,opticalWidth(n),site.id,alpha*.94,glowToggle.checked?hot:0,window.flowAccent,1.25,stage.clientWidth/ctx.canvas.width);
+      moving||=progress<1;
+    }
+    return moving;
+}
+function drawField(ctx,field,n,weight,width=flowSpecs.get(n)?.width||.08){
+  const w=ctx.canvas.width,h=ctx.canvas.height,coords=field.coords;
+  const focus=cursorForCanvas(ctx.canvas,true), displaced=[0,0];
+  const octaves=Math.max(0,Math.log2(.0825265/width));
+  const spec=flowSpecs.get(n);
+  // Carry a few strands into the tissue along the same cleared paths as the gas.
+  const ribbonCarry=ramp(472,553,n)*(1-ramp(674,812,n));
+  // Most trajectories leave the view or pass behind tissue on this approach.
+  // Fade in additional fixed IDs here so the light setting stays legible.
+  const approach=ramp(466,492,n)*(1-ramp(522,553,n));
+  const light=densityMenu.value==='light',cssPixel=w/Math.max(1,stage.clientWidth);
+  for(let i=0;i<coords.length/words;i++){
+    const extra=light&&i>=flowSeeds.length;
+    if(extra&&(!approach||i>=4*flowSeeds.length))break;
+    const j=i*words,age=coords[j]/4095;
+    if(!age)continue;
+    const world=spec?.worldTracers&&!(i%22>=spec.legacyFrom);
+    const phase=world?1:(i*.61803399+(reduced.matches?0:trailClock/(3.2+(i%9)*.26)))%1;
+    const k=Math.min(steps-2,Math.floor(phase*(steps-1))),mix=phase*(steps-1)-k;
+    const idx=j+1+2*k;
+    let x=((1-mix)*coords[idx]+mix*coords[idx+2])*w/4095;
+    let y=((1-mix)*coords[idx+1]+mix*coords[idx+3])*h/4095;
+    const rank=(i*.61803399)%1;
+    const population=world||i<3?1:1-ramp(.18+.78*ramp(0,10,octaves),.32+.68*ramp(0,10,octaves),rank);
+    // Smaller cohorts enter as finer detail resolves. Scale and visibility are
+    // functions of the camera footprint and reverse identically on pullback.
+    const sizes=field.radii||flowSpecs.get(n)?.radii;
+    const r=sizes?sizes[i]/32:(.87+.64*(i%7)/6)*Math.min(3.4,Math.max(.60,2**(.64*(octaves-rank*6))));
+    const exposure=1+2.5*ramp(7,17,octaves)+(recruitment.get(n)||0)*(.6+.8*rank);
+    const visibleAge=(1-Math.pow(1-age,exposure+(world?2.6*approach:0)))*(extra?approach:1);
+    if(window.showRibbons&&ribbonCarry>0&&i%6===0){
+      const strength=ribbonCarry*visibleAge*population*weight;
+      for(let m=0;m<steps-1;m++){
+        const knot=j+1+2*m;
+        const pulse=.5+.5*Math.cos(2*Math.PI*((m+.5)/(steps-1)-phase));
+        const opacity=strength*(.18+.54*pulse*pulse)*Math.sin(Math.PI*(m+.5)/(steps-1));
+        const mx=(coords[knot]+coords[knot+2])*w/8190,my=(coords[knot+1]+coords[knot+3])*h/8190;
+        ctx.strokeStyle='rgba('+(window.flowAccent?goldStroke(ctx,mx,my):'220,239,244')+','+opacity+')';
+        const hot=glowAt(focus,mx,my,w,h);
+        if(glowToggle.checked&&hot>.015){
+          ctx.shadowColor=window.flowAccent?'rgb('+goldStroke(ctx,mx,my)+')':'#c1e5fa';ctx.shadowBlur=hot*3;
+          ctx.strokeStyle='rgba('+(window.flowAccent?goldStroke(ctx,mx,my,true):'195,255,244')+','+Math.min(1,opacity*(1+1.8*hot))+')';
+        }
+        ctx.lineWidth=1.1+.65*pulse;ctx.lineCap='round';
+        ctx.beginPath();ctx.moveTo(coords[knot]*w/4095,coords[knot+1]*h/4095);
+        ctx.lineTo(coords[knot+2]*w/4095,coords[knot+3]*h/4095);ctx.stroke();
+        if(glowToggle.checked&&hot>.015)ctx.shadowBlur=0;
+      }
+      ctx.lineCap='butt';
+    }
+    if(!window.showPeptides)continue;
+    const life=world?1:ramp(0,.13,phase)*(1-ramp(.88,1,phase));
+    const a=visibleAge*population*weight*life*(.68+.3*Math.sqrt(flowSeeds[i%flowSeeds.length][2]/255));
+    const dx=(coords[idx+2]-coords[idx])*w/4095,dy=(coords[idx+3]-coords[idx+1])*h/4095;
+    const len=Math.max(1,Math.hypot(dx,dy)),tail=Math.min(3.3,len*mix);
+    const hot=glowAt(focus,x,y,w,h);
+    if(hot>.001){
+      journeyParticles.deflect(x,y,dx/len,dy/len,field.mask,focus,w,h,8*cssPixel,displaced);
+      x=displaced[0];y=displaced[1];
+    }
+    if(width>8e-6){ctx.strokeStyle='rgba('+(window.flowAccent?goldStroke(ctx,x,y):'175,219,229')+','+(a*.56)+')';ctx.lineWidth=r*1.3;ctx.beginPath();ctx.moveTo(x-dx/len*tail,y-dy/len*tail);ctx.lineTo(x,y);ctx.stroke();}
+    const emphasis=world?approach:0;
+    const head=r+emphasis*Math.max(0,1.7*cssPixel-r);
+    journeyParticles.peptide(ctx,x,y,width,i,a,glowToggle.checked?hot:0,window.flowAccent,Math.min(head,1.55*cssPixel),1/cssPixel);
+  }
+}
+function interpolatePaths(motion,t){
+  const a=motion.from.coords,b=motion.field.coords,out=motion.tween.coords;
+  const ra=flowSpecs.get(motion.n)?.radii,rb=flowSpecs.get(motion.next)?.radii;
+  if(ra&&rb){
+    const sizes=motion.tween.radii??=new Uint8Array(ra.length);
+    for(let i=0;i<ra.length;i++)sizes[i]=ra[i]+(rb[i]-ra[i])*t;
+  }else motion.tween.radii=null;
+  for(let i=0;i<a.length;i+=words){
+    // A newly seeded particle is a new arrival. Never draw a line through
+    // the intervening tissue when an old particle leaves the camera.
+    const replaced=(b[i]<150&&b[i]<a[i])||Math.hypot(a[i+1]-b[i+1],a[i+2]-b[i+2])>530;
+    const mix=replaced?(t<.5?0:1):t;
+    out[i]=replaced?(t<.5?a[i]*(1-2*t):b[i]*(2*t-1)):a[i]+(b[i]-a[i])*t;
+    for(let j=i+1;j<i+words;j++)out[j]=a[j]+(b[j]-a[j])*mix;
+  }
+}
+function paintTrail(now){
+  trailTick=0;
+  const shot=landingShots.get(trailFrame);
+  if(shot&&trailWeight&&!recording&&!document.hidden){
+    trailCtx.clearRect(0,0,trail.width,trail.height);trail.hidden=false;
+    const moving=drawSites(trailCtx,shot,now-arrivalStart,trailFrame);
+    if(moving&&!reduced.matches)trailTick=requestAnimationFrame(paintTrail);
+    return;
+  }
+  const bounds=el('flowBounds').checked&&activeField;
+  if((!trailWeight&&!bounds)||!activeField||document.hidden||recording){trail.hidden=true;return;}
+  if(studyOn && window.studyClock.options.animate && Number.isFinite(trailLast))trailClock+=Math.min(.1,(now-trailLast)/1000)*window.studyClock.speed(now);
+  trailLast=now;
+  trailCtx.clearRect(0,0,trail.width,trail.height);trail.hidden=false;
+  if(bounds){drawBounds(activeField.mask);trailCtx.drawImage(maskCanvas,0,0,trail.width,trail.height);}
+  drawField(trailCtx,activeField,trailFrame,trailWeight);
+  const spec=flowSpecs.get(trailFrame);
+  if(studyOn&&window.studyClock.options.animate&&(!spec?.worldTracers||spec.legacyFrom!==undefined))trailTick=requestAnimationFrame(nextTrailTick);
+}
+function nextTrailTick(now){
+  if(now-trailLast<32){trailTick=requestAnimationFrame(nextTrailTick);return;}
+  paintTrail(now);
+}
+function setTrail(n,enabled){
+  if(n!==trailFrame)arrivalStart=n===1154&&sequencePlaying&&trailFrame>0&&trailFrame<n&&!reduced.matches?performance.now()-(cameraMotion?.next===n?410:0):-Infinity;
+  trailFrame=n;
+  trailWeight=enabled?ramp(446,474,n):0;
+  cancelAnimationFrame(trailTick);trailTick=0;
+  if(n&&enabled&&(activeField||landingShots.has(n))&&!document.hidden)paintTrail(performance.now());
+  else {trail.hidden=true;trailLast=-Infinity;}
+}
+el('flowBounds').onchange=()=>setTrail(outside,transition.value!=='off');
+document.addEventListener('visibilitychange',()=>setTrail(outside,transition.value!=='off'));
+
+let gasLoad=null;
+function updateParticles(){
+  const n=window.journeyOutside||0, width=window.gasScale[n]?.[0];
+  const enabled=transition.value!=='off'&&!recording;
+  const spec=flowSpecs.get(n);
+  const gasBand=Boolean(enabled&&spec?.travel);
+  const study=window.airwayStudy;
+  const gasReady=gasBand&&study?.inspect().frame===446&&study.inspect().ready;
+  const wasBridge=window.journeyGasBridge;
+  window.journeyGasBridge=Boolean(gasReady);
+  main.classList.toggle('gasBridge',Boolean(gasReady));
+  stage.dataset.bridge=String(Boolean(gasReady));stage.dataset.particlePaths=String(!!activeField);
+  window.gasFlight=gasReady?[...spec.travel,spec.surfaceDepth]:null;
+  window.gasFlightCamera=gasReady?spec.flightCamera:null;
+  window.gasFlightRadius=gasReady?spec.flightRadius:null;
+  window.journeyRibbonGain=gasReady?1+.65*smoothUnit((1-spec.airwayRatio)/.65):1;
+  if(wasBridge&&!gasReady)study?.redraw();
+  setTrail(n,enabled);
+  if(gasReady){
+    study.redraw();
+  }else if(gasBand&&study?.inspect().ready&&!gasLoad){
+    gasLoad=study.select(446).then(()=>{if(window.journeyOutside)updateParticles();}).catch(()=>{}).finally(()=>{gasLoad=null;});
+  }
+  paintMarkers(n);
+  el('particlePhase').textContent=storyBeats.get(n)||(!n?'Airway gas':gasBand?'Distal airway · ribbons and gas':trailWeight>.02?(n<1019?'Tissue · illustrative particle continuation':'ECM · tracer approach'):!markerLayer.hidden?
+    'ECM · projected molecular centres':(width&&width<.00012?'ECM approach · saved render':'Tissue · saved render'));
+}
+function paintMarkers(n){
+  const points=markers.get(n)||[],width=window.gasScale[n]?.[0];
+  const strength=width>0?smoothUnit(Math.log(.00012/width)/Math.log(80)):0;
+  markerLayer.hidden=!window.showPeptides||recording||!points.length||transition.value!=='guided'||!strength;
+  if(!markerLayer.hidden){
+    const ctx=markerLayer.getContext('2d'),focus=cursorForCanvas(markerLayer,true);
+    ctx.clearRect(0,0,1280,720);
+    let index=0;
+    for(const [,u,v] of points){
+      const x=u*1280,y=v*720,hot=glowAt(focus,x,y,1280,720);
+      journeyParticles.peptide(ctx,x,y,width,index++,.9*strength,glowToggle.checked?hot:0,window.flowAccent,1.3,stage.clientWidth/1280);
+    }
+  }
+}
+transition.onchange=()=>{if(outside)jumpTo(Number(slider.value));else updateParticles();};
+palette.onchange=()=>{
+  applyPalette();
+  try{localStorage.setItem('lung-flow.palette',palette.value);}catch{}
+  activeMask=null;
+  window.airwayStudy?.redraw();
+  if(outside)jumpTo(Number(slider.value));else updateParticles();
+};
+// The engine can become ready after a deep-linked saved frame has been displayed.
+const readyCallback=window.gasReady;
+window.gasReady=()=>{readyCallback();window.unlockGoldJourney();updateParticles();};
+const blend=el('blend'), reduced=matchMedia('(prefers-reduced-motion: reduce)');
+let fade=null, outside=0, selected=window.gasStartFrame, request=0;
+slider.value=selected;
+function playableIndex(){
+  const limit=window.goldDownloads.state.limit;
+  return limit>=frameIds.at(-1)?frameIds.length-1:Math.max(0,frameIds.findLastIndex(n=>n<=limit));
+}
+const clamp=v=>Math.max(0,Math.min(playableIndex(),v));
+const images=new Map();
+function pictureFile(n) {
+  if(window.stillJourney)return n<397?'plates/'+String(n).padStart(4,'0')+'.jpg':n<=446?'volume/'+String(n).padStart(4,'0')+'-ct.webp':later.get(n);
+  return 'scene/'+n+'.webp';
+}
+function fetchImage(n) {
+  const file=pictureFile(n);
+  if (images.has(file)) return images.get(file);
+  const img=new Image();img.decoding='async';img.src=previewBuffer.url(file);
+  if(file===accentFiles.get(n))img.dataset.accentPlate='true';
+  const ready=img.decode().then(()=>img).catch(err=>{images.delete(file);throw err;});
+  images.set(file,ready);
+  if(images.size>5) images.delete(images.keys().next().value);
+  return ready;
+}
+// Keep a small decoded window while the complete compressed sequence is pinned.
+// The first post-airway frame can be prepared while the native renderer is playing.
+function warmPictures(index,end){
+  const first=Math.max(447,index+1);
+  for(let k=first;k<=Math.min(first+2,end);k++){
+    const n=frameIds[k];
+    // Only the nearest decoded pictures warm; no full-range preload gate.
+    void fetchImage(n).catch(()=>{});
+    if(transition.value!=='off')void readField(n).catch(()=>{});
+  }
+}
+function capture(old,n){
+  // Adjacent native frames already commit as a complete decoded anatomy and GPU field.
+  // Copying the WebGL layer into a 2D canvas here forces a synchronous GPU readback.
+  if(scrolling&&old>=385&&old<=446&&n>=385&&n<=446)return;
+  if((sequencePlaying||scrolling)&&((old>=446&&n<=1137)||(old<=446&&n<=446&&Math.abs(old-n)<=1)))return;
+  if(reduced.matches||old===n||Math.abs(n-old)>Math.max(stride(old),stride(n))||(!scrolling&&!sequencePlaying))return;
+  const w=Math.min(1280,Math.round(stage.clientWidth*devicePixelRatio));
+  if(!w)return;
+  blend.width=w;blend.height=Math.round(w*9/16);
+  const ctx=blend.getContext('2d');
+  ctx.fillStyle='#171717';ctx.fillRect(0,0,w,blend.height);
+  const layers=outside?(window.journeyGasBridge?['laterPlate','plate','anatomy','flow']:['laterPlate']):['plate','anatomy','flow'];
+  if(outside)layers.push('flowTrail','ecmMarkers');
+  for(const id of layers){
+    const layer=el(id),style=getComputedStyle(layer);
+    if(layer.hidden||style.visibility==='hidden'||layer.tagName==='IMG'&&(!layer.complete||!layer.naturalWidth))continue;
+    const zoom=window.journeyGasBridge && ['plate','anatomy','flow'].includes(id)?Number(stage.style.getPropertyValue('--bridge-zoom')):1;
+    ctx.filter=style.filter;ctx.globalAlpha=Number(style.opacity);ctx.drawImage(layer,(1-zoom)*w/2,(1-zoom)*blend.height/2,w*zoom,blend.height*zoom);
+  }
+  ctx.globalAlpha=1;fade?.cancel();blend.hidden=false;
+  const effect=blend.animate([{opacity:1},{opacity:0}],{duration:sequencePlaying?40:Math.min(160,1000/feel.speed),fill:'forwards',easing:'ease-in-out'});
+  fade=effect;effect.onfinish=()=>{if(fade===effect){blend.hidden=true;effect.cancel();fade=null;}};
+}
+window.beforeGasSwap=capture;
+function showOutside(n) {
+  outside=window.journeyOutside=n;
+  main.classList.toggle('later',Boolean(n));el('laterPlate').hidden=!n;
+  updateParticles();
+}
+window.goldSeekFrame=n=>{if(window.journeyDownloadLocked)return false;const i=frameIds.indexOf(n);if(i<0)return false;stopMotion();jumpTo(i);return true;};
+async function selectIndex(i) {
+  i=clamp(Math.round(i));
+  const ticket=++request, n=frameIds[i];
+  selected=i;slider.value=scrolling?position:i;
+  if(window.stillJourney){
+    const img=await fetchImage(n);
+    if(ticket!==request||recording)return;
+    img.id='laterPlate';img.alt='';img.hidden=false;img.draggable=false;
+    if(el('laterPlate')!==img)el('laterPlate').replaceWith(img);
+    outside=window.journeyOutside=n>446?n:0;
+    stage.dataset.displayedFrame=String(n);reportJourneyEdge(n);window.showGasScale(n);
+    el('frameLabel').textContent=frameText(n);slider.setAttribute('aria-valuetext',frameText(n));
+    el('status').textContent='Saved frames';return;
+  }
+  if(n>446){
+    const spec=flowSpecs.get(n),guided=transition.value!=='off';
+    const study=window.airwayStudy;
+    const anchor=guided&&spec?.travel&&study?.inspect().ready&&study.inspect().frame!==446
+      ? study.select(446) : null;
+    // Keep the last complete image visible until the incoming anatomy and path packet can paint together.
+    const [img,field]=await Promise.all([fetchImage(n),guided&&spec?readField(n):null,anchor]);
+    if(ticket!==request||recording)return;
+    const old=outside||window.airwayStudy?.inspect().frame||0;
+    capture(old,n);
+    activeField=field;
+    img.id='laterPlate';img.alt='';img.draggable=false;
+    if(el('laterPlate')!==img)el('laterPlate').replaceWith(img);
+    // Keep the existing live clock through the distal bridge; never replace it with a bare JPEG.
+    showOutside(n);
+    slider.value=scrolling?position:i;
+    stage.dataset.displayedFrame=String(n);
+    reportJourneyEdge(n);
+    if(cameraMotion&&cameraMotion.n!==n)clearCameraMotion();
+    el('status').textContent=storyBeats.get(n)||((frameIds[i-1]!==n-1)?'Saved checkpoint · preceding frames unavailable':'');
+    window.showGasScale(n);window.goldNativeFrame?.(n);el('frameLabel').textContent=frameText(n);
+    slider.setAttribute('aria-valuetext',frameText(n));
+    el('tissue').hidden=false;
+    const next=frameIds[clamp(i+(sequencePlaying?playStride(n):(direction||1)))];
+    if(next>446&&next!==n&&(!sequencePlaying||previewBuffer.pinned(pictureFile(next)))){
+      void fetchImage(next).catch(()=>{});
+      if(transition.value!=='off')void readField(next).catch(()=>{});
+    }
+  }else{
+    if(window.airwayStudy?.inspect().ready){
+      const drawn=await window.airwayStudy.select(n);
+      if(!drawn||window.airwayStudy.inspect().frame!==n)return;
+    }
+    else await window.gasEarlySeek(n);
+    if(ticket!==request||recording)return;
+    activeField=null;showOutside(0);stage.dataset.displayedFrame=String(n);reportJourneyEdge(n);window.showGasScale(n);
+    
+    el('frameLabel').textContent=frameText(n);slider.setAttribute('aria-valuetext',frameText(n));
+    el('tissue').hidden=n<430;el('status').textContent='';slider.value=scrolling?position:i;
+  }
+}
+function jumpTo(i){
+  stopMotion();
+  selectIndex(i).catch(showError);
+}
+function showError(){el('status').textContent='Frame unavailable. Try again.';}
+let sliderSeek=0;
+slider.addEventListener('input',()=>{
+  if(window.journeyDownloadLocked)return;
+  const destination=Number(slider.value);
+  cancelAnimationFrame(sliderSeek);
+  sliderSeek=requestAnimationFrame(()=>{sliderSeek=0;jumpTo(destination);});
+});
+let activeIndex=null;
+el('sequencePlay').disabled=true;
+let depthFields;
+function loadDepthFields(){
+  if(!depthFields)depthFields=fetch('depth-fields-v006.json',{cache:'force-cache'}).then(response=>{
+    if(!response.ok)throw Error('Particle registration unavailable');
+    return response.json();
+  }).catch(error=>{depthFields=null;throw error;});
+  return depthFields;
+}
+async function readIndex(file,first=false){
+  if(file===activeIndex||!/^journey-(?:p2_gas_share_v\d+|native-\d{8}-v\d+)\.json$/.test(file))return;
+  const response=await fetch(file);
+  if(!response.ok)throw Error();
+  const [rows,registered]=await Promise.all([response.json(),loadDepthFields()]);
+  let previous=446;
+  for(const [n,path,scale] of rows){
+    if(!Number.isSafeInteger(n)||n<=previous||!/^frame-[0-9]+-[a-f0-9]+\.jpg$/.test(path))throw Error();
+    previous=n;
+  }
+  const current=outside||frameIds[Number(slider.value)]||0;
+  const oldPath=later.get(current);
+  if(!first)stopMotion();
+  frameIds.length=447;later.clear();images.clear();markers.clear();storyBeats.clear();flowSpecs.clear();
+  accentFiles.clear();landingShots.clear();landingCameras.clear();recruitment.clear();
+  let credit=0,priorFrame=446;
+  for(const [n,path,scale,sourcePoints,beat,sourceSpec,graded] of rows){
+    if(n>rangeEnd)break;
+    const extra=registered[n]?.plate===path?registered[n]:null;
+    const spec=extra?{...sourceSpec,...extra.field}:sourceSpec,points=extra?extra.points:sourcePoints;
+    credit=Math.min(20,Math.max(0,credit-1,n-priorFrame-1));priorFrame=n;
+    recruitment.set(n,credit);
+    frameIds.push(n);later.set(n,path);window.gasScale[n]=scale;
+    if(points?.length)markers.set(n,points);
+    if(beat)storyBeats.set(n,beat);
+    if(spec?.anchors?.length===3)landingShots.set(n,spec.anchors);
+    if(spec?.landingCamera)landingCameras.set(n,spec.landingCamera);
+    if(spec?.radii)spec.radii=Uint8Array.from(atob(spec.radii),c=>c.charCodeAt(0));
+    if(/^accent-[0-9]+-[a-f0-9]{16}\.jpg$/.test(graded))accentFiles.set(n,graded);
+    if(spec&&/^paths-[a-f0-9]{20}\.gz$/.test(spec.paths)&&Number.isSafeInteger(spec.index)&&spec.index>=0&&spec.index<24&&(!spec.guide||/^tissue-[0-9]+-[a-f0-9]{16}\.(jpg|webp)$/.test(spec.guide)))flowSpecs.set(n,spec);
+  }
+  // Track a common point backwards through the registered plates, including
+  // their lateral camera motion. Interpolate this axis during each zoom step.
+  cameraAims.clear();
+  let aim=[.5,.5];
+  for(let i=rows.length-1;i>=0;i--){
+    const [n,,,,,spec]=rows[i],pose=spec?.toNext;
+    if(n>886||!pose||!(pose[0]>0))continue;
+    aim=aim.map((v,k)=>.5+(v-.5-pose[k+1])/pose[0]);
+    cameraAims.set(n,aim);
+  }
+  cameraAims.set(446,aim);
+  for(let n=445;n>=385;n--){
+    const ratio=window.gasScale[n][0]/window.gasScale[n+1][0];
+    aim=aim.map((v,k)=>.5+(v-.5-distalOffsets[n-385][k])/ratio);
+    cameraAims.set(n,aim);
+  }
+  slider.max=frameIds.length-1;activeIndex=file;el('sequencePlay').disabled=false;
+  const desired=first?Number(new URLSearchParams(location.search).get('frame')):current;
+  if(desired>446&&!recording){
+    const found=frameIds.findIndex(n=>n>=desired), i=found<0?frameIds.length-1:found;
+    if(first||current!==frameIds[i]||oldPath!==later.get(current)||flowSpecs.has(current))jumpTo(i);
+    else {slider.value=i;updateParticles();}
+  }
+  if(first&&new URLSearchParams(location.search).has('tour')&&!reduced.matches&&!recording){
+    if(window.airwayStudy?.inspect().ready)el('sequencePlay').click();
+    else {const initial=Number(slider.value),ready=window.gasReady;window.gasReady=()=>{ready();if(!recording&&!document.hidden&&!sequencePlaying&&Number(slider.value)===initial)el('sequencePlay').click();};}
+  }
+}
+
+window.studyIndexReady=readIndex('journey-native-20261121-v003.json',true);
+window.studySelect=async n=>{
+  const index=frameIds.indexOf(n);
+  if(index<0)throw Error('Missing selected frame '+n);
+  await selectIndex(index);
+  if(Number(stage.dataset.displayedFrame)!==n)throw Error('Frame not drawn '+n);
+  window.studyClock.setZoom(window.gasScale[n]?.[0]);
+};
+let studyOn=true;
+window.studyOptions=(options,active)=>{
+  studyOn=active;
+  Object.assign(window.studyClock.options,options);
+  window.airwayStudy?.play(active && options.animate);
+  window.breathStudy?.choose(options.look);
+  palette.value=options.palette;applyPalette();
+  densityMenu.value=options.density;
+  window.showRibbons=options.ribbons;
+  window.showForeground=options.foreground;
+  window.airwayStudy?.redraw();updateParticles();window.redrawGoldNear?.();
+};
+let position=selected,target=selected,velocity=0,effort=0,direction=0,lastInput=-Infinity;
+let glide=0,releaseArmed=false;
+let lastTick=0,issued=selected,animation=0,epoch=0,waiting=false,drag=null,scrolling=false;
+let sequenceEpoch=0,sequencePlaying=false;
+function stride(n){
+  const blue=ramp(600,650,n)*(1-ramp(756,825,n));
+  const approach=ramp(743,819,n)*(1-ramp(956,990,n));
+  return 1+Math.round(6*blue+3*approach);
+}
+function playStride(n){
+  if(n>=447&&n<=1018&&flowSpecs.get(n)?.radii)return 1;
+  return n<650?Math.min(stride(n),650-n):stride(n);
+}
+let cameraMotion=null,transitionTrail=null,pathTween=null;
+let nearTweenWidth=0,nearTweenAim=null;
+let cameraDeadline=0;
+function clearCameraMotion(){
+  nearTweenWidth=0;nearTweenAim=null;
+  if(cameraMotion){
+    if(cameraMotion.overlay&&!cameraMotion.registered){stage.insertBefore(trail,markerLayer);trail.style.removeProperty('transform');}
+    if(cameraMotion.overlay&&outside===cameraMotion.n)el('status').textContent=storyBeats.get(outside)||'';
+    if(cameraMotion.entry){
+      el('anatomy').style.removeProperty('transform');
+      if(!outside){window.journeyGasBridge=false;window.gasFlight=null;window.airwayStudy?.redraw();}
+    }
+    cameraMotion.overlay?.remove();
+
+    cameraMotion.incomingTrail?.remove();
+    cameraMotion.plate.style.removeProperty('transform');
+    cameraMotion.plate.style.removeProperty('transform-origin');
+    if(cameraMotion.registered&&outside===cameraMotion.n)paintFlight(outside,cameraMotion.next,0);
+    cameraMotion=null;
+    stage.classList.remove('approachBridge','registeredStep');
+  }
+  stage.style.removeProperty('--camera-zoom');
+}
+function timing(n,next){
+  if(n===446&&next===447&&transition.value!=='off'){
+    const b=flowSpecs.get(next),r=b?.airwayRatio;
+    if(r>0&&b.airwayAim){
+      const [x,y]=b.airwayAim,g=(1-r*r)/r;
+      return {n,next,z:1/r,dx:(.5-x)*g,dy:(.5-y)*g,entry:true,registered:true,duration:Math.max(65,1000*Math.log2(1/r)/.64)};
+    }
+  }
+  if(n>=447&&next<=1018&&transition.value!=='off'&&flowSpecs.get(n)?.cameraToNext){
+    let h=new DOMMatrix();
+    const start=frameIds.indexOf(n),end=frameIds.indexOf(next);
+    for(let k=start;k<end;k++){
+      const p=flowSpecs.get(frameIds[k])?.cameraToNext;
+      if(!p)return null;
+      const transform=new DOMMatrix([p[0],p[3],0,p[6],p[1],p[4],0,p[7],0,0,1,0,p[2],p[5],0,p[8]]);
+      h=transform.multiply(h);
+    }
+    const ratio=flowSpecs.get(n).width/flowSpecs.get(next).width;
+    const duration=n<604?Math.max(65,1000*Math.log2(ratio)/.64):n>=980?Math.max(85,1000*Math.log2(ratio)/.61):1000/24;
+    return {n,next,z:ratio,h,inv:h.inverse(),registered:true,duration};
+  }
+  if(n>=447&&next<=886&&transition.value!=='off'){
+    const i=frameIds.indexOf(n),end=frameIds.indexOf(next);
+    let z=1,dx=0,dy=0;
+    for(let k=i;k>=0&&k<end;k++){
+      const pose=flowSpecs.get(frameIds[k])?.toNext;
+      if(!pose)break;
+      dx=pose[0]*dx+pose[1];dy=pose[0]*dy+pose[2];z*=pose[0];
+      if(k===end-1){
+        const ratio=flowSpecs.get(n).width/flowSpecs.get(next).width;
+        const earlyDuration=Math.max(65,1000*Math.log2(ratio)/.64);
+        const blend=ramp(580,635,n);
+        return {n,next,z,dx,dy,registered:true,duration:earlyDuration*(1-blend)+1000/24*blend};
+      }
+    }
+  }
+  const camera=landingCameras.get(next);
+  if(camera&&n>=1101&&n<next&&transition.value!=='off')
+    return {n,next,z:camera.zoom,focus:camera.focus,gap:true,duration:2600};
+  const early=n>=446&&n<604,late=n>=980&&next<=1102;
+  if(!early&&!late)return null;
+  const a=window.gasScale[n]?.[0]||flowSpecs.get(n)?.width,b=window.gasScale[next]?.[0]||flowSpecs.get(next)?.width;
+  if(!(a>0&&b>0))return null;
+  const z=Math.max(1,a/b),gap=late&&next-n>1&&z>1.2;
+  const rate=early ? .64 : .61;
+  return {n,next,z,gap,duration:Math.max(early?65:85,1000*Math.log2(z)/rate)};
+}
+function beginCamera(step,incoming,field){
+  const {n,next}=step;
+  const plate=el(step.entry?'plate':'laterPlate');
+  let overlay=null,incomingTrail=null,surface=null;
+  if(incoming){
+    if(step.registered&&!step.h&&!step.entry)surface=registeredSurface(plate,incoming);
+    overlay=surface?.canvas||incoming.cloneNode(false);overlay.id='approachInset';overlay.hidden=false;
+    overlay.setAttribute('aria-hidden','true');
+    if(step.entry){
+      stage.insertBefore(overlay,el('flow'));window.journeyGasBridge=true;
+    }else plate.after(overlay);
+    if(!step.registered)stage.insertBefore(trail,overlay);
+    if(!step.entry&&transition.value!=='off'&&(field||landingShots.has(next))){
+      incomingTrail=transitionTrail??=trail.cloneNode(false);
+      incomingTrail.id='approachTrail';incomingTrail.hidden=false;incomingTrail.removeAttribute('style');
+      if(step.registered)trail.after(incomingTrail);else overlay.after(incomingTrail);
+    }
+    stage.classList.add(step.registered?'registeredStep':'approachBridge');
+    if(!step.registered)el('status').textContent='Timing study · camera move between saved F'+n+' and F'+next;
+  }
+  const from=activeField;
+  if(step.registered&&from&&field&&pathTween?.coords.length!==from.coords.length)
+    pathTween={coords:new Uint16Array(from.coords.length)};
+  const tween=step.registered&&from&&field?pathTween:null;
+  return cameraMotion={...step,plate,overlay,surface,incomingTrail,field,from,tween};
+}
+function paintFlight(n,next,t){
+  const a=flowSpecs.get(n),b=flowSpecs.get(next);
+  if(n===446&&window.journeyGasBridge&&b?.travel){
+    window.gasFlight=[...b.travel.map(v=>v*t),b.surfaceDepth];
+    window.gasFlightCamera=window.gasFlightRadius=null;window.airwayStudy?.redraw();
+  }else if(window.journeyGasBridge&&a?.travel&&b?.travel){
+    window.gasFlight=[...a.travel.map((x,i)=>x+(b.travel[i]-x)*t),a.surfaceDepth];
+    window.gasFlightCamera=a.flightCamera&&b.flightCamera?a.flightCamera.map((x,i)=>x+(b.flightCamera[i]-x)*t):a.flightCamera;
+    window.gasFlightRadius=a.flightRadius&&b.flightRadius?a.flightRadius.map((x,i)=>x+(b.flightRadius[i]-x)*t):a.flightRadius;
+    window.airwayStudy?.redraw();
+  }
+}
+function paintCamera(motion,t){
+  const firstWidth=opticalWidth(motion.n), lastWidth=opticalWidth(motion.next);
+  nearTweenWidth=firstWidth*(lastWidth/firstWidth)**t;
+  nearTweenAim=interpolateAim(motion.n,motion.next,t);
+  window.redrawGoldNear?.();
+  if(reduced.matches)return;
+  const {n,z,plate,overlay}=motion,s=Math.pow(z,t);
+  if(motion.registered&&overlay){
+    // Both photographs follow the measured landmark transform. At t=1 the
+    // incoming image is at its native pose before the DOM commits that frame.
+    if(motion.surface){motion.surface.paint(motion,t);}else if(motion.h){
+      const identity=new DOMMatrix().toFloat64Array();
+      const at=new DOMMatrix(motion.h.toFloat64Array().map((v,i)=>identity[i]+t*(v-identity[i])));
+      const px=new DOMMatrix().scale(plate.clientWidth,plate.clientHeight);
+      const uv=px.inverse();
+      plate.style.transformOrigin=overlay.style.transformOrigin='0 0';
+      plate.style.transform=px.multiply(at).multiply(uv).toString();
+      overlay.style.transform=px.multiply(at).multiply(motion.inv).multiply(uv).toString();
+    }else{
+      const x=100*motion.dx,y=100*motion.dy;
+      plate.style.transform='translate('+x*t+'%,'+y*t+'%) scale('+s+')';
+      overlay.style.transform='translate('+x*(t-s/z)+'%,'+y*(t-s/z)+'%) scale('+s/z+')';
+    }
+    if(motion.entry)el('anatomy').style.transform=plate.style.transform;
+    if(!motion.surface)overlay.style.opacity=String(t);
+
+    if(motion.tween&&motion.incomingTrail){
+      motion.tween.mask=t<.5?motion.from.mask:motion.field.mask;
+      const c=motion.incomingTrail,ctx=c.getContext('2d'),a=flowSpecs.get(n).width,b=flowSpecs.get(motion.next).width;
+      interpolatePaths(motion,t);
+      ctx.clearRect(0,0,c.width,c.height);
+      if(el('flowBounds').checked){drawBounds(t<.5?motion.from.mask:motion.field.mask);ctx.drawImage(maskCanvas,0,0,c.width,c.height);}
+      drawField(ctx,motion.tween,n,ramp(446,474,n+(motion.next-n)*t),a*(b/a)**t);
+    }
+    paintFlight(n,motion.next,t);
+  }else if(overlay){
+    // The next plate subtends b/a of the outgoing field. Move its centre to
+    // the optical axis as its angular footprint expands to the viewport.
+    const focus=motion.focus||(n<1059?[.29,.59]:[.31,.49]),pan=smoothUnit(t);
+    const dx=(focus[0]-.5)*100,dy=(focus[1]-.5)*100;
+    plate.style.transform='translate('+(-dx*pan*s)+'%,'+(-dy*pan*s)+'%) scale('+s+')';
+    trail.style.transform=plate.style.transform;
+    overlay.style.transform='translate('+(dx*(1-pan)*s)+'%,'+(dy*(1-pan)*s)+'%) scale('+(s/z)+')';
+    const end=smoothUnit((t-.84)/.16);
+    const feather=23*(1-smoothUnit((t-.92)/.08))+.1;
+    const edges='transparent,black '+feather+'%,black '+(100-feather)+'%,transparent';
+    overlay.style.maskImage='radial-gradient(ellipse farthest-corner,black '+(24+76*end)+'%,transparent '+(75+31*end)+'%),linear-gradient(to right,'+edges+'),linear-gradient(to bottom,'+edges+')';
+    overlay.style.maskComposite='intersect';
+    overlay.style.opacity=String(smoothUnit(t/.19));
+    if(motion.incomingTrail){
+      const canvas=motion.incomingTrail,ctx=canvas.getContext('2d');
+      canvas.style.cssText=overlay.style.cssText;
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      if(motion.field)drawField(ctx,motion.field,motion.next,1);
+      else drawSites(ctx,landingShots.get(motion.next),(motion.scrub?1120:410)*smoothUnit((t-.54)/.46),motion.next);
+    }
+  }else {
+    stage.style.setProperty('--camera-zoom',s);
+    paintFlight(n,motion.next,t);
+  }
+}
+async function cameraInterval(n,next,generation){
+  const step=timing(n,next);
+  if(step)step.duration=window.goldNativeDuration?.(n,next,step.duration)??step.duration;
+  if(!step){cameraDeadline=0;return false;}
+  const [img,field]=(step.gap||step.registered)&&!reduced.matches?await Promise.all([fetchImage(next),transition.value==='off'?null:readField(next)]):[null,null];
+  if(generation!==sequenceEpoch)return true;
+  const now=performance.now();
+  // Keep the fractional remainder of a display refresh across adjacent frames.
+  // A slow download starts a fresh interval instead of skipping the passage.
+  const start=step.registered&&cameraDeadline>0&&now-cameraDeadline<32?Math.min(now,cameraDeadline):now;
+  cameraDeadline=step.registered?start+step.duration:0;
+  const motion=beginCamera(step,img,field);
+  paintCamera(motion,Math.min(1,(now-start)/step.duration));
+  if(step.registered){
+    const ahead=frameIds[frameIds.indexOf(next)+playStride(next)];
+    if(ahead&&previewBuffer.pinned(pictureFile(ahead))){void fetchImage(ahead).catch(()=>{});void readField(ahead).catch(()=>{});}
+  }
+  await new Promise(done=>{
+    function paint(now){
+      if(generation!==sequenceEpoch||document.hidden){if(cameraMotion===motion)clearCameraMotion();done();return;}
+      const t=Math.max(0,Math.min(1,(now-start)/step.duration));
+      paintCamera(motion,t);
+      if(t<1)requestAnimationFrame(paint);else done();
+    }
+    requestAnimationFrame(paint);
+  });
+  return true;
+}
+function sequenceState(value){
+  sequencePlaying=window.journeySequencePlaying=value;
+  el('sequencePlay').textContent=value?'Pause frame sequence':'Play frame sequence';
+  el('sequencePlay').setAttribute('aria-pressed',String(value));
+}
+el('sequencePlay').onclick=async()=>{
+  if(sequencePlaying){stopMotion();return;}
+  stopMotion();
+  const generation=sequenceEpoch;
+  window.airwayStudy?.play(false);sequenceState(true);
+  let i=Number(slider.value);
+  const query=new URLSearchParams(location.search);
+  const limit=query.has('until')?frameIds.findIndex(n=>n>=Number(query.get('until'))):-1;
+  const end=limit>0?limit:frameIds.length-1;
+  if(i>=end){
+    const at=frameIds.findIndex(n=>n>=Number(query.get('frame')));
+    i=limit>0?Math.max(0,at):-1;
+    if(i>=0)await selectIndex(i);
+  }
+  try{
+    warmPictures(i,end);
+    el('sequencePlay').textContent='Pause frame sequence';
+    while(generation===sequenceEpoch && i<end && !recording && !document.hidden){
+      const begin=performance.now(), previous=i;
+      await window.goldDownloads.waitFor(frameIds[Math.min(i+1,end)]);
+      if(generation!==sequenceEpoch||document.hidden)break;
+      i=Math.min(i+playStride(frameIds[i]??0),end,playableIndex());
+      const timed=await cameraInterval(frameIds[previous],frameIds[i],generation);
+      if(generation!==sequenceEpoch||document.hidden)break;
+      await selectIndex(i);
+      clearCameraMotion();
+      if(i>=446)warmPictures(i,end);
+      const gap=previous>=0&&frameIds[i]-frameIds[previous]>i-previous;
+      if(!timed){const duration=window.goldNativeDuration?.(frameIds[previous],frameIds[i],storyBeats.has(frameIds[i])?1450:gap?500:1000/24)??1000/24;await new Promise(done=>setTimeout(done,Math.max(0,duration-(performance.now()-begin))));}
+    }
+  }catch(err){if(err.name!=='AbortError')showError();}finally{if(generation===sequenceEpoch){clearCameraMotion();sequenceState(false);}}
+};
+// Image translations measured on adjacent CT plates after matching their calibrated field widths.
+const distalOffsets=[[-0.00313,-0.00556],[-0.00313,-0.00556],[-0.00313,-0.00556],[-0.00313,-0.00556],[-0.00313,-0.00556],[-0.00313,-0.00556],[-0.00625,-0.00556],[-0.00625,-0.00556],[-0.00625,-0.00556],[-0.00625,-0.00556],[-0.00625,-0.00556],[-0.00625,-0.00556],[-0.00625,-0.00556],[-0.00625,-0.00556],[-0.00625,-0.00556],[-0.00625,-0.00556],[-0.00625,-0.01111],[-0.00625,-0.01111],[-0.00625,-0.00556],[-0.00625,-0.01111],[-0.00625,-0.01111],[-0.00625,-0.01111],[-0.00625,-0.01111],[-0.00625,-0.01111],[-0.00625,-0.01111],[-0.00625,-0.00556],[-0.00625,-0.00556],[-0.00625,-0.00556],[-0.00625,-0.00556],[-0.00625,-0.00556],[-0.00625,-0.00556],[-0.00313,-0.00556],[-0.00313,-0.00556],[-0.00313,-0.00556],[-0.00313,-0.00556],[-0.00313,-0.00556],[-0.00313,-0.00556],[0.0,-0.00556],[0.0,-0.00556],[0.0,-0.00556],[0.0,-0.00556],[0.0,0.0],[0.0,0.0],[0.0,0.0],[0.0,0.0],[0.0,0.0],[0.0,0.0],[0.0,0.0],[0.0,0.0],[0.0,0.0],[0.0,0.0],[0.0,0.0],[0.0,0.0],[0.0,0.0],[0.0,0.0],[0.0,0.0],[0.0,0.0],[0.0,0.0],[0.0,0.0],[0.0,0.0],[0.0,0.0]];
+function distalPose(p){
+  return p>=385&&p<446&&!reduced.matches;
+}
+function fractionalZoom(){
+  const n=outside||frameOnScreen;
+  const delta=position-(outside?frameIds.indexOf(n):n);
+  if(!outside&&distalPose(n)&&position>=385&&position<=446){
+    // Compose consecutive measured plate transforms during a fast forward scrub.
+    // The incoming full-resolution plate takes over at its matching camera pose.
+    const travel=Math.min(3,446-n,Math.max(0,delta));
+    let scale=1,x=0,y=0;
+    for(let k=0;k<Math.ceil(travel);k++){
+      const f=n+k,t=Math.min(1,travel-k),offset=distalOffsets[f-385];
+      const ratio=(window.gasScale[f][0]/window.gasScale[f+1][0])**t;
+      scale*=ratio;x=x*ratio+offset[0]*t;y=y*ratio+offset[1]*t;
+    }
+    stage.style.setProperty('--camera-zoom',String(scale));
+    // The same crop must cover the viewport at every interpolated pose.
+    const margin=Math.max(0,(scale-1)/2);
+    stage.style.setProperty('--scrub-x',(100*Math.max(-margin,Math.min(margin,x)))+'%');
+    stage.style.setProperty('--scrub-y',(100*Math.max(-margin,Math.min(margin,y)))+'%');
+    window.redrawGoldNear?.();
+    return;
+  }
+  stage.style.removeProperty('--scrub-x');stage.style.removeProperty('--scrub-y');
+  const i=Math.floor(position), t=position-i;
+  const source=window.gasScale[n]?.[0], a=window.gasScale[frameIds[i]]?.[0], b=window.gasScale[frameIds[i+1]]?.[0]||a;
+  if(reduced.matches||!source||!a||!b){stage.style.removeProperty('--camera-zoom');return;}
+  const width=a*Math.pow(b/a,t);
+  stage.style.setProperty('--camera-zoom',String(Math.max(1,source/width)));
+}
+let pendingScrub=null;
+function scrubStep(p){
+  if(window.stillJourney)return null;
+  const i=Math.floor(p),a=frameIds[i],b=frameIds[i+1];
+  return b&&timing(a,b);
+}
+function drawScrub(step,t){
+  if(window.stillJourney)return;
+  if(!outside&&distalPose(frameOnScreen)&&position>=385&&position<=446){
+    if(cameraMotion?.scrub)clearCameraMotion();
+    fractionalZoom();return;
+  }
+  if(step?.registered){stage.style.removeProperty('--scrub-x');stage.style.removeProperty('--scrub-y');}
+  if(!(step?.gap||step?.registered)||reduced.matches||t===0){
+    if(cameraMotion?.scrub)clearCameraMotion();
+    if(step?.registered){stage.style.removeProperty('--camera-zoom');return;}
+    fractionalZoom();return;
+  }
+  if((outside||frameOnScreen)!==step.n)return;
+  if(cameraMotion?.scrub&&cameraMotion.n===step.n){paintCamera(cameraMotion,t);return;}
+  if(pendingScrub===step.next)return;
+  const generation=epoch;
+  pendingScrub=step.next;
+  Promise.all([fetchImage(step.next),transition.value==='off'?null:readField(step.next)]).then(([img,field])=>{
+    if(generation===epoch&&(outside||frameOnScreen)===step.n&&scrubStep(position)?.n===step.n&&position%1){
+      clearCameraMotion();
+      const motion=beginCamera(step,img,field);motion.scrub=true;paintCamera(motion,position%1);
+    }
+  }).catch(showError).finally(()=>{if(pendingScrub===step.next)pendingScrub=null;});
+}
+function displayIndex(p){
+  if(distalPose(p))return Math.floor(p);
+  const step=scrubStep(p);
+  if(reduced.matches)return Math.round(p);
+  const i=Math.floor(p);
+  if(p===i||step?.gap||step?.registered)return i;
+  const a=window.gasScale[frameIds[i]]?.[0], b=window.gasScale[frameIds[i+1]]?.[0];
+  return a&&b&&b>a?i+1:i;
+}
+function stopMotion(){
+  stage.style.removeProperty('--scrub-x');stage.style.removeProperty('--scrub-y');
+  previewBuffer.cancel();
+  if(scrolling){slider.step='1';slider.value=issued;}
+  clearCameraMotion();
+  cameraDeadline=0;
+  cancelAnimationFrame(animation);animation=0;epoch++;waiting=false;scrolling=false;
+  sequenceEpoch++;sequenceState(false);stage.style.removeProperty('--camera-zoom');
+  velocity=effort=direction=glide=0;releaseArmed=false;lastInput=-Infinity;
+}
+function advance(now){
+  animation=0;
+  if(recording||document.hidden){stopMotion();return;}
+  const dt=Math.max(0,Math.min((now-lastTick)/1000,.05));lastTick=now;
+
+  const cap=feel.speed;
+  if(now-lastInput>=95&&releaseArmed&&!waiting){
+    glide=reduced.matches?0:Math.min(Math.abs(velocity),feel.speed)*Math.min(1,effort/190);
+    releaseArmed=false;
+  }
+  if(glide>0&&!waiting){
+    // Integrate dv/dt = -friction - damping*v up to the exact stopping time.
+    const f=feel.friction,d=feel.damping,t=Math.min(dt,Math.log1p(d*glide/f)/d);
+    const decay=-Math.expm1(-d*t),distance=(glide+f/d)*decay/d-f*t/d;
+    target=clamp(target+direction*distance);
+    glide=Math.max(0,glide-(glide+f/d)*decay);
+    if(glide<.02||target===0||target===playableIndex())glide=0;
+  }
+  if(distalPose(position)&&!releaseArmed&&!glide&&now-lastInput>160)target=Math.round(target);
+  const gap=target-position,desired=Math.max(-cap,Math.min(cap,gap*7));
+  velocity+=(desired-velocity)*(-Math.expm1(-dt/.105));
+  const smoothNative=!window.stillJourney&&!outside&&distalPose(frameOnScreen)&&position>=385&&position<=446;
+  const touchScrub=drag?.seeking&&drag.touch&&!reduced.matches;
+  if(!waiting||smoothNative||touchScrub){
+    let distance=Math.min(Math.abs(gap),Math.max(0,Math.sign(gap)*velocity*dt));
+    if(waiting&&touchScrub&&!smoothNative){
+      // Keep a short input lead while a plate decodes. The next request picks
+      // the latest intended position and the visible plate stays in place.
+      const lead=Math.min(6,feel.speed*.12);
+      distance=Math.min(distance,Math.max(0,lead-Math.sign(gap)*(position-issued)));
+    }
+    if(smoothNative&&waiting&&gap>0){
+      // Spread the remaining registered travel across a slow decode instead of
+      // exhausting it in the first few wheel ticks and freezing the camera.
+      const headroom=Math.max(0,Math.min(446,frameOnScreen+3)-position);
+      distance=Math.min(distance,headroom*(-Math.expm1(-dt/.42)));
+    }
+    position+=Math.sign(gap)*distance;
+    if(Math.abs(target-position)<.025)position=target;
+    if(smoothNative){
+      const ahead=gap>0?Math.min(446,frameOnScreen+3):frameOnScreen+1;
+      position=Math.max(frameOnScreen-1,Math.min(ahead,position));
+    }
+    slider.value=position;
+    drawScrub(scrubStep(position),position%1);
+    const wanted=displayIndex(position);
+    if(!waiting&&wanted!==issued){
+      issued=wanted;
+      const generation=epoch;waiting=true;
+      selectIndex(issued).then(()=>{if(generation===epoch)drawScrub(scrubStep(position),position%1);}).catch(()=>{if(generation===epoch){stopMotion();showError();}}).finally(()=>{if(generation===epoch)waiting=false;});
+    }
+  }
+  if(waiting||releaseArmed||glide>0||position!==target||issued!==displayIndex(target))animation=requestAnimationFrame(advance);
+  else {velocity=0;scrolling=false;slider.step='any';slider.value=position;}
+}
+function pushMotion(delta){
+  if(window.journeyDownloadLocked||!Number.isFinite(delta)||!delta)return;
+  if(sequencePlaying)stopMotion();
+  const now=performance.now(),sign=Math.sign(delta);
+  if(!animation&&!cameraMotion?.scrub&&Math.abs(position-Number(slider.value))>.001){
+    position=target=Number(slider.value);issued=displayIndex(position);velocity=0;
+  }
+  effort*=Math.exp(-(now-lastInput)/260);
+  glide=0;
+  releaseArmed=direction===sign&&now-lastInput<250&&effort>15;
+  if(direction&&direction!==sign){target=position;velocity=effort=0;}
+  direction=sign;
+  const pixels=Math.min(150,Math.abs(delta));
+  const pace=stride(frameIds[issued]??0),sustained=ramp(70,260,effort),lead=Math.max(feel.coast*pace,feel.speed*.2*sustained);
+  const gain=feel.sensitivity*pace*(1+Math.max(0,feel.speed/12-1)*sustained)*(.018+.025*feel.acceleration*Math.min(1,effort/260));
+  target=clamp(Math.max(position-lead,Math.min(position+lead,target+sign*pixels*gain)));
+  effort=Math.min(380,effort+pixels);lastInput=now;scrolling=true;slider.step='any';
+  if(!animation){lastTick=now;animation=requestAnimationFrame(advance);}
+}
+function pageJourneyFrame(){
+  const frame=window.frameElement;
+  return frame?.hasAttribute('data-journey-edge')?frame:null;
+}
+function reportJourneyEdge(n){
+  window.goldDownloads.atFrame(n);
+  const frame=pageJourneyFrame();
+  if(frame)frame.dataset.journeyEdge=n===0?'start':n===frameIds.at(-1)?'end':'middle';
+}
+function scrollJourney(delta){
+  const frame=pageJourneyFrame();
+  if(frame&&!frame.dispatchEvent(new CustomEvent('pulmo-journey-scroll',{cancelable:true,detail:delta})))return;
+  if(!recording)pushMotion(delta);
+}
+window.addEventListener('message',event=>{
+  if(event.source===parent&&event.origin===location.origin&&event.data?.type==='pulmo-journey-scroll'&&!recording)pushMotion(event.data.delta);
+});
+window.addEventListener('wheel',event=>{
+  if(event.ctrlKey||(event.target.closest('.nav,#movieControls')&&event.target!==slider))return;
+  const delta=Math.abs(event.deltaY)>=Math.abs(event.deltaX)?event.deltaY:event.deltaX;
+  if(recording&&!pageJourneyFrame())return;
+  event.preventDefault();
+  scrollJourney(delta*(event.deltaMode===1?14:event.deltaMode===2?innerHeight:1));
+},{passive:false});
+window.addEventListener('keydown',event=>{
+  if(!pageJourneyFrame()||event.defaultPrevented||event.ctrlKey||event.metaKey||event.target.closest?.('input,textarea,select,button,[contenteditable]'))return;
+  const delta=event.key==='ArrowDown'?45:event.key==='ArrowUp'?-45:event.key==='PageDown'?innerHeight:event.key==='PageUp'?-innerHeight:event.key===' '?(event.shiftKey?-innerHeight:innerHeight):0;
+  if(delta){event.preventDefault();scrollJourney(delta);}
+});
+main.addEventListener('pointerdown',event=>{
+  if(recording||!event.isPrimary||event.target.closest('.nav,#movieControls,#viewerSwitch'))return;
+  if(event.pointerType!=='touch'||sequencePlaying)stopMotion();
+  // The iframe moves when control returns to the page at either end.
+  // Screen coordinates keep that movement out of the finger's scroll delta.
+  drag={id:event.pointerId,x:event.screenX,y:event.screenY,lastY:event.screenY,seeking:false,touch:event.pointerType==='touch'};
+  main.setPointerCapture(event.pointerId);
+});
+window.addEventListener('pointermove',event=>{
+  if(!drag||drag.id!==event.pointerId||recording)return;
+  const dy=drag.y-event.screenY;
+  if(!drag.seeking&&Math.abs(dy)>7&&Math.abs(dy)>Math.abs(event.screenX-drag.x)*1.15)drag.seeking=true;
+  if(drag.seeking){scrollJourney((drag.lastY-event.screenY)*1.8);drag.lastY=event.screenY;}
+});
+for(const kind of ['pointerup','pointercancel'])window.addEventListener(kind,e=>{
+  if(drag?.id!==e.pointerId)return;
+  if(e.pointerType==='touch'&&kind==='pointerup'&&!drag.seeking)stopMotion();
+  drag=null;
+});
+document.querySelector('.nav').addEventListener('pointerdown',e=>{if(!e.target.closest('#sequencePlay'))stopMotion();});
+document.addEventListener('visibilitychange',()=>{if(document.hidden)stopMotion();});
+
+ window.refreshPeptideLayers=()=>{
+   if(!el('blend').hidden){fade?.cancel();el('blend').hidden=true;}
+   window.airwayStudy?.redraw();updateParticles();
+   if(cameraMotion?.scrub)paintCamera(cameraMotion,position%1);
+   window.redrawGoldNear?.();
+ };
+ // Only this decorative optical layer uses projected anchor span during unmeasured storyboard shots.
+ // The calibrated ruler continues to use saved camera widths exclusively.
+ function opticalWidth(n){
+   const measured=window.gasScale[n]?.[0];
+   if(measured>0)return measured;
+   const reference=window.gasScale[1137]?.[0]||4.4e-7;
+   const span=id=>{const shot=landingShots.get(id);return shot?.length>=3?Math.hypot(shot[0].uv[0]-shot[2].uv[0],shot[0].uv[1]-shot[2].uv[1]):0;};
+   const start=span(1154), extent=span(n)||(n===1208?Math.sqrt(span(1188)*span(1238)):0);
+   return start&&extent?reference*start/(extent*(landingCameras.get(1154)?.zoom||1)):reference;
+ }
+ function interpolateAim(n,next,t){
+   const a=cameraAims.get(n)||[.5,.5],b=cameraAims.get(next)||landingCameras.get(next)?.focus||[.5,.5];
+   return a.map((v,k)=>v+(b[k]-v)*t);
+ }
+ window.redrawGoldNear=journeyParticles.foreground(el('nearParticles'),stage,()=>{
+   const n=outside||Number(stage.dataset.displayedFrame)||0;
+   const zoom=Number(stage.style.getPropertyValue('--camera-zoom'))||1;
+   const width=nearTweenWidth||opticalWidth(n)/zoom;
+   const pose=!outside&&n>=385&&n<446&&scrolling?Math.max(n,Math.min(n+3,position)):n;
+   const aim=nearTweenAim||interpolateAim(Math.floor(pose),Math.ceil(pose),pose%1);
+   return {frame:n,width,aim,enabled:!window.stillJourney&&window.showPeptides&&window.showForeground&&window.goldDownloadReady&&!recording&&transition.value!=='off',
+     animate:!reduced.matches&&(el('play').getAttribute('aria-pressed')==='true'||sequencePlaying),
+     travel:Math.log2((window.gasScale[0]?.[0]||3.49)/width),
+     strength:ramp(12,88,n)*.92,full:densityMenu.value==='full',accent:window.flowAccent,
+     glow:glowToggle.checked,focus:cursorForCanvas(el('nearParticles'),true)};
+ });
+ for(const control of [palette,transition,densityMenu,glowToggle])control.addEventListener('change',()=>window.redrawGoldNear());
+ el('play').addEventListener('click',()=>window.redrawGoldNear());
+ window.resetGoldInput=()=>{stopMotion();position=target=selected=issued=0;velocity=effort=direction=0;lastInput=-Infinity;drag=null;pendingScrub=null;slider.value=0;window.gasStartFrame=0;};
+ window.bindGasInputs=({scrub,play,playing,requested,pointer,pointerPos})=>{
+  document.addEventListener('keydown',e=>{
+   if(recording||e.target.closest('input,select,summary,button,a'))return;
+   if(['Home','End','ArrowUp','ArrowDown','ArrowLeft','ArrowRight','PageUp','PageDown',' '].includes(e.key))e.preventDefault();else return;
+   if(e.key===' '){play(!playing());return}stopMotion();
+   const dir=['ArrowUp','ArrowLeft','PageUp'].includes(e.key)?-1:1;
+   jumpTo(e.key==='Home'?0:e.key==='End'?Number(slider.max):Number(slider.value)+dir*(e.shiftKey||e.key.startsWith('Page')?12:1));
+  });
+  const point=e=>{[pointer.x,pointer.y]=pointerPos(e);pointer.inside=pointer.x>=0&&pointer.y>=0&&pointer.x<=1280&&pointer.y<=720};
+  stage.addEventListener('pointerdown',e=>{if(!recording && !el('options').open) point(e);});
+  window.addEventListener('pointermove',e=>{
+   if (!recording && !el('options').open && (stage.contains(e.target)||drag)) point(e);
+  });
+  stage.onpointerleave=()=>{pointer.inside=false};
+  for(const kind of ['pointerup','pointercancel']) window.addEventListener(kind,e=>{
+    if(e.pointerType==='touch'||kind==='pointercancel')pointer.inside=false;
+  });
+ };
+ const load=p=>new Promise((resolve,reject)=>{const s=document.createElement('script');s.src=p;s.onload=resolve;s.onerror=reject;document.body.append(s)});
+ window.useStillJourney=()=>{
+   if(recording||window.stillJourney)return;
+   window.studyFailed=true;
+   const n=Number(stage.dataset.displayedFrame)||window.gasStartFrame||0;
+   window.stillJourney=true;stopMotion();main.classList.add('stillMode');
+   window.airwayStudy?.play(false);window.unlockGoldJourney(false);
+   const i=Math.max(0,frameIds.indexOf(n));position=target=issued=i;
+   selectIndex(i).catch(showError);
+ };
+ async function start(){
+  window.showGasScale(window.gasStartFrame);
+  if(new URLSearchParams(location.search).has('video')){window.showGasMovie();return}
+  if(!window.DecompressionStream||!window.ResizeObserver){window.useStillJourney();return}
+  const gl=el('flow').getContext('webgl2',{alpha:true,premultipliedAlpha:true,antialias:false,preserveDrawingBuffer:true});
+  if(!gl||gl.getParameter(gl.MAX_TEXTURE_SIZE)<2048){window.useStillJourney();return}
+  el('flow').addEventListener('webglcontextlost',e=>{e.preventDefault();window.useStillJourney()});
+  await load('engine.js');
+ }
+ start().catch(window.useStillJourney);
+})();
+</script><script>(() => {
+  const viewer = document.querySelector('main');
+  const controls = [...document.querySelectorAll('[data-fullscreen]')];
+  const active = () => Boolean(document.fullscreenElement || document.webkitFullscreenElement);
+  const request = viewer.requestFullscreen || viewer.webkitRequestFullscreen;
+  const exit = document.exitFullscreen || document.webkitExitFullscreen;
+  let orientationLocked = false;
+
+  function updateControls() {
+    const expanded = active();
+    for (const button of controls) {
+      button.textContent = expanded ? 'Exit full screen' : 'Full screen';
+      button.setAttribute('aria-pressed', String(expanded));
+    }
+    if (!expanded && orientationLocked) {
+      screen.orientation?.unlock?.();
+      orientationLocked = false;
+    }
+  }
+
+  async function toggle() {
+    if (active()) {
+      await exit.call(document);
+      return;
+    }
+    const portraitPhone = matchMedia('(pointer: coarse) and (orientation: portrait)').matches;
+    await request.call(viewer);
+    if (portraitPhone && screen.orientation?.lock) {
+      try {
+        await screen.orientation.lock('landscape');
+        orientationLocked = true;
+      } catch {
+        // Rotation follows the device on browsers that leave orientation to the user.
+      }
+    }
+  }
+
+  for (const button of controls) {
+    button.hidden = !(request && exit);
+    button.onclick = () => toggle().catch(() => {
+      const status = document.getElementById('status');
+      status.textContent = 'Full screen is unavailable in this browser.';
+    });
+  }
+  document.addEventListener('fullscreenchange', updateControls);
+  document.addEventListener('webkitfullscreenchange', updateControls);
+  updateControls();
+})();
+</script></body></html>

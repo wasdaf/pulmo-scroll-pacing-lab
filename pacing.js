@@ -4,7 +4,7 @@ export const methods = {
   relaxed: '1 screen per doubling. The same curve as Log · ¾ screen with a longer scroll.',
   detail: '¾ screen per doubling, with ¼ screen across the lung detail and extra travel through the bilayer approach.',
 };
-export function buildTracks(frames) {
+export function buildTracks(frames,weights={}) {
   const log = [0], detail = [0];
   for (let i = 1; i < frames.length; i++) {
     const a = frames[i - 1], b = frames[i];
@@ -16,8 +16,18 @@ export function buildTracks(frames) {
     if (a.id >= 1050 && b.id <= 1074) emphasis *= 1.5;
     detail.push(detail[i - 1] + emphasis);
   }
-  return {log, relaxed: log.map(d => d * 4 / 3), detail,
+  const tracks={log, relaxed: log.map(d => d * 4 / 3), detail,
     even: frames.map((_, i) => i * log.at(-1) / (frames.length - 1))};
+  for(const track of Object.values(tracks)){
+    let original=0, distance=0;
+    for(let i=1;i<track.length;i++){
+      const segment=track[i]-original;original=track[i];
+      const start=frames[i-1].id,end=frames[i].id;
+      const weight=start>=250&&end<=350?weights.lungTravel:start>=1050&&end<=1074?weights.bilayerTravel:1;
+      distance+=segment*(weight??1);track[i]=distance;
+    }
+  }
+  return tracks;
 }
 export function frameAt(track, distance) {
   let lo = 0, hi = track.length - 1;
